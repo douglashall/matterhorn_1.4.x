@@ -529,3 +529,17 @@
 
 # /src/
 /src/main
+
+# /modules/matterhorn-conductor-harvard/
+/modules/matterhorn-conductor-harvard/target
+/modules/matterhorn-conductor-harvard/bin
+/modules/matterhorn-conductor-harvard/.project
+/modules/matterhorn-conductor-harvard/.classpath
+/modules/matterhorn-conductor-harvard/.settings
+
+# /modules/matterhorn-harvard/
+/modules/matterhorn-harvard/target
+/modules/matterhorn-harvard/bin
+/modules/matterhorn-harvard/.project
+/modules/matterhorn-harvard/.classpath
+/modules/matterhorn-harvard/.settings
