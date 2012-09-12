@@ -27,6 +27,17 @@
     <!-- Mix and match profiles used to build common deployments -->
 
     <profile>
+      <id>admin-harvard</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>modules/matterhorn-conductor-harvard</module>
+        <module>modules/matterhorn-harvard</module>
+      </modules>
+    </profile>
+    
+    <profile>
       <id>admin</id>
       <activation>
         <activeByDefault>true</activeByDefault>
