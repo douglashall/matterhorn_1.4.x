@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+
+  <scr:component name="edu.harvard.matterhorn.IsitesService" immediate="true" 
+  		activate="activate" deactivate="deactivate">
+    <implementation class="edu.harvard.matterhorn.IsitesService" />
+    <property name="service.description" value="Provides integration with the iSites platform" />
+    <service>
+      <provide interface="edu.harvard.matterhorn.IsitesService" />
+      <provide interface="org.osgi.service.cm.ManagedService" />
+    </service>
+    <reference name="seriesService" interface="org.opencastproject.series.api.SeriesService"
+	    cardinality="1..1" policy="static" bind="setSeriesService" />
+  </scr:component>
+
+</scr:components>
