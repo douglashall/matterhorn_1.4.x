@@ -1,0 +1,531 @@
+
+# /
+/target
+/*.iml
+/*.ipr
+
+# /docs/scripts/
+/docs/scripts/init
+
+# /docs/scripts/3rd_party/
+/docs/scripts/3rd_party/packages
+/docs/scripts/3rd_party/tarballs
+
+# /docs/scripts/3rd_party/base_libs/jam/
+/docs/scripts/3rd_party/base_libs/jam/jam-*.zip
+/docs/scripts/3rd_party/base_libs/jam/jam-*.rpm
+
+# /docs/scripts/3rd_party/base_libs/jpeg/
+/docs/scripts/3rd_party/base_libs/jpeg/jpegsrc*.tar.gz
+/docs/scripts/3rd_party/base_libs/jpeg/jpegsrc*.tgz
+/docs/scripts/3rd_party/base_libs/jpeg/jpegsrc*.tar.bz2
+/docs/scripts/3rd_party/base_libs/jpeg/jpegsrc*.tbz
+/docs/scripts/3rd_party/base_libs/jpeg/jpegsrc*.tb2
+/docs/scripts/3rd_party/base_libs/jpeg/jpegsrc*.zip
+
+# /docs/scripts/3rd_party/base_libs/png/
+/docs/scripts/3rd_party/base_libs/png/libpng-*.tar.gz
+/docs/scripts/3rd_party/base_libs/png/libpng-*.tgz
+/docs/scripts/3rd_party/base_libs/png/libpng-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/png/libpng-*.tbz
+/docs/scripts/3rd_party/base_libs/png/libpng-*.tb2
+/docs/scripts/3rd_party/base_libs/png/libpng-*.zip
+
+# /docs/scripts/3rd_party/base_libs/pthread/
+/docs/scripts/3rd_party/base_libs/pthread/pthreads-*.tar.gz
+/docs/scripts/3rd_party/base_libs/pthread/pthreads-*.tgz
+/docs/scripts/3rd_party/base_libs/pthread/pthreads-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/pthread/pthreads-*.tbz
+/docs/scripts/3rd_party/base_libs/pthread/pthreads-*.tb2
+/docs/scripts/3rd_party/base_libs/pthread/pthreads-*.zip
+
+# /docs/scripts/3rd_party/base_libs/rand48/
+/docs/scripts/3rd_party/base_libs/rand48/rand48-*.tar.gz
+/docs/scripts/3rd_party/base_libs/rand48/rand48-*.tgz
+/docs/scripts/3rd_party/base_libs/rand48/rand48-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/rand48/rand48-*.tbz
+/docs/scripts/3rd_party/base_libs/rand48/rand48-*.tb2
+/docs/scripts/3rd_party/base_libs/rand48/rand48-*.zip
+
+# /docs/scripts/3rd_party/base_libs/scons/
+/docs/scripts/3rd_party/base_libs/scons/scons-*.tar.gz
+/docs/scripts/3rd_party/base_libs/scons/scons-*.tgz
+/docs/scripts/3rd_party/base_libs/scons/scons-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/scons/scons-*.tbz
+/docs/scripts/3rd_party/base_libs/scons/scons-*.tb2
+/docs/scripts/3rd_party/base_libs/scons/scons-*.zip
+
+# /docs/scripts/3rd_party/base_libs/tiff/
+/docs/scripts/3rd_party/base_libs/tiff/tiff-*.tar.gz
+/docs/scripts/3rd_party/base_libs/tiff/tiff-*.tgz
+/docs/scripts/3rd_party/base_libs/tiff/tiff-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/tiff/tiff-*.tbz
+/docs/scripts/3rd_party/base_libs/tiff/tiff-*.tb2
+/docs/scripts/3rd_party/base_libs/tiff/tiff-*.zip
+
+# /docs/scripts/3rd_party/base_libs/yasm/
+/docs/scripts/3rd_party/base_libs/yasm/yasm-*.tar.gz
+/docs/scripts/3rd_party/base_libs/yasm/yasm-*.tgz
+/docs/scripts/3rd_party/base_libs/yasm/yasm-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/yasm/yasm-*.tbz
+/docs/scripts/3rd_party/base_libs/yasm/yasm-*.tb2
+/docs/scripts/3rd_party/base_libs/yasm/yasm-*.zip
+
+# /docs/scripts/3rd_party/base_libs/zlib/
+/docs/scripts/3rd_party/base_libs/zlib/zlib-*.tar.gz
+/docs/scripts/3rd_party/base_libs/zlib/zlib-*.tgz
+/docs/scripts/3rd_party/base_libs/zlib/zlib-*.tar.bz2
+/docs/scripts/3rd_party/base_libs/zlib/zlib-*.tbz
+/docs/scripts/3rd_party/base_libs/zlib/zlib-*.tb2
+/docs/scripts/3rd_party/base_libs/zlib/zlib-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg/
+/docs/scripts/3rd_party/ffmpeg/ffmpeg-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg/ffmpeg-*.tgz
+/docs/scripts/3rd_party/ffmpeg/ffmpeg-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg/ffmpeg-*.tbz
+/docs/scripts/3rd_party/ffmpeg/ffmpeg-*.tb2
+/docs/scripts/3rd_party/ffmpeg/ffmpeg-*.zip
+/docs/scripts/3rd_party/ffmpeg/.done-linux
+
+# /docs/scripts/3rd_party/ffmpeg_libs/faac/
+/docs/scripts/3rd_party/ffmpeg_libs/faac/faac-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/faac/faac-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/faac/faac-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/faac/faac-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/faac/faac-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/faac/faac-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg_libs/lame/
+/docs/scripts/3rd_party/ffmpeg_libs/lame/lame-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/lame/lame-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/lame/lame-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/lame/lame-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/lame/lame-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/lame/lame-*.zip
+/docs/scripts/3rd_party/ffmpeg_libs/lame/.done-linux
+
+# /docs/scripts/3rd_party/ffmpeg_libs/mp4v2/
+/docs/scripts/3rd_party/ffmpeg_libs/mp4v2/mp4v2-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/mp4v2/mp4v2-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/mp4v2/mp4v2-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/mp4v2/mp4v2-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/mp4v2/mp4v2-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/mp4v2/mp4v2-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg_libs/ogg/
+/docs/scripts/3rd_party/ffmpeg_libs/ogg/libogg-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/ogg/libogg-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/ogg/libogg-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/ogg/libogg-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/ogg/libogg-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/ogg/libogg-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg_libs/sdl/
+/docs/scripts/3rd_party/ffmpeg_libs/sdl/SDL-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/sdl/SDL-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/sdl/SDL-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/sdl/SDL-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/sdl/SDL-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/sdl/SDL-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg_libs/theora/
+/docs/scripts/3rd_party/ffmpeg_libs/theora/libtheora-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/theora/libtheora-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/theora/libtheora-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/theora/libtheora-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/theora/libtheora-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/theora/libtheora-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg_libs/vorbis/
+/docs/scripts/3rd_party/ffmpeg_libs/vorbis/libvorbis-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/vorbis/libvorbis-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/vorbis/libvorbis-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/vorbis/libvorbis-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/vorbis/libvorbis-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/vorbis/libvorbis-*.zip
+
+# /docs/scripts/3rd_party/ffmpeg_libs/x264/
+/docs/scripts/3rd_party/ffmpeg_libs/x264/x264-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/x264/x264-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/x264/x264-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/x264/x264-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/x264/x264-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/x264/x264-*.zip
+/docs/scripts/3rd_party/ffmpeg_libs/x264/.done-linux
+
+# /docs/scripts/3rd_party/ffmpeg_libs/xvid/
+/docs/scripts/3rd_party/ffmpeg_libs/xvid/xvidcore-*.tar.gz
+/docs/scripts/3rd_party/ffmpeg_libs/xvid/xvidcore-*.tgz
+/docs/scripts/3rd_party/ffmpeg_libs/xvid/xvidcore-*.tar.bz2
+/docs/scripts/3rd_party/ffmpeg_libs/xvid/xvidcore-*.tbz
+/docs/scripts/3rd_party/ffmpeg_libs/xvid/xvidcore-*.tb2
+/docs/scripts/3rd_party/ffmpeg_libs/xvid/xvidcore-*.zip
+
+# /docs/scripts/3rd_party/mediainfo/
+/docs/scripts/3rd_party/mediainfo/MediaInfo_CLI_*.tar.gz
+/docs/scripts/3rd_party/mediainfo/MediaInfo_CLI_*.tgz
+/docs/scripts/3rd_party/mediainfo/MediaInfo_CLI_*.tar.bz2
+/docs/scripts/3rd_party/mediainfo/MediaInfo_CLI_*.tbz
+/docs/scripts/3rd_party/mediainfo/MediaInfo_CLI_*.tb2
+/docs/scripts/3rd_party/mediainfo/MediaInfo_CLI_*.zip
+
+# /docs/scripts/3rd_party/ocropus/
+/docs/scripts/3rd_party/ocropus/ocropus-*.tar.gz
+/docs/scripts/3rd_party/ocropus/ocropus-*.tgz
+/docs/scripts/3rd_party/ocropus/ocropus-*.tar.bz2
+/docs/scripts/3rd_party/ocropus/ocropus-*.tbz
+/docs/scripts/3rd_party/ocropus/ocropus-*.tb2
+/docs/scripts/3rd_party/ocropus/ocropus-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/dlfcn/
+/docs/scripts/3rd_party/ocropus_libs/dlfcn/dlfcn-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/dlfcn/dlfcn-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/dlfcn/dlfcn-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/dlfcn/dlfcn-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/dlfcn/dlfcn-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/dlfcn/dlfcn-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/fst/
+/docs/scripts/3rd_party/ocropus_libs/fst/openfst-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/fst/openfst-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/fst/openfst-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/fst/openfst-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/fst/openfst-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/fst/openfst-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/gif/
+/docs/scripts/3rd_party/ocropus_libs/gif/giflib-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/gif/giflib-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/gif/giflib-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/gif/giflib-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/gif/giflib-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/gif/giflib-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/glob/
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.zip
+/docs/scripts/3rd_party/ocropus_libs/glob/glob-*.patch
+
+# /docs/scripts/3rd_party/ocropus_libs/gsl/
+/docs/scripts/3rd_party/ocropus_libs/gsl/gsl-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/gsl/gsl-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/gsl/gsl-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/gsl/gsl-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/gsl/gsl-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/gsl/gsl-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/iulib/
+/docs/scripts/3rd_party/ocropus_libs/iulib/iulib-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/iulib/iulib-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/iulib/iulib-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/iulib/iulib-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/iulib/iulib-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/iulib/iulib-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/leptonica/
+/docs/scripts/3rd_party/ocropus_libs/leptonica/leptonlib-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/leptonica/leptonlib-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/leptonica/leptonlib-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/leptonica/leptonlib-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/leptonica/leptonlib-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/leptonica/leptonlib-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/regex/
+/docs/scripts/3rd_party/ocropus_libs/regex/regex-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/regex/regex-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/regex/regex-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/regex/regex-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/regex/regex-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/regex/regex-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/sdl_gfx/
+/docs/scripts/3rd_party/ocropus_libs/sdl_gfx/SDL_gfx-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/sdl_gfx/SDL_gfx-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/sdl_gfx/SDL_gfx-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/sdl_gfx/SDL_gfx-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/sdl_gfx/SDL_gfx-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/sdl_gfx/SDL_gfx-*.zip
+
+# /docs/scripts/3rd_party/ocropus_libs/sdl_image/
+/docs/scripts/3rd_party/ocropus_libs/sdl_image/SDL_image-*.tar.gz
+/docs/scripts/3rd_party/ocropus_libs/sdl_image/SDL_image-*.tgz
+/docs/scripts/3rd_party/ocropus_libs/sdl_image/SDL_image-*.tar.bz2
+/docs/scripts/3rd_party/ocropus_libs/sdl_image/SDL_image-*.tbz
+/docs/scripts/3rd_party/ocropus_libs/sdl_image/SDL_image-*.tb2
+/docs/scripts/3rd_party/ocropus_libs/sdl_image/SDL_image-*.zip
+
+# /docs/scripts/3rd_party/qtembedder/
+/docs/scripts/3rd_party/qtembedder/qt_sbtl_embedder-*.tar.gz
+/docs/scripts/3rd_party/qtembedder/qt_sbtl_embedder-*.tgz
+/docs/scripts/3rd_party/qtembedder/qt_sbtl_embedder-*.tar.bz2
+/docs/scripts/3rd_party/qtembedder/qt_sbtl_embedder-*.tbz
+/docs/scripts/3rd_party/qtembedder/qt_sbtl_embedder-*.tb2
+/docs/scripts/3rd_party/qtembedder/qt_sbtl_embedder-*.zip
+
+# /docs/scripts/3rd_party/tesseract/
+/docs/scripts/3rd_party/tesseract/tesseract-*.tar.gz
+/docs/scripts/3rd_party/tesseract/tesseract-*.tgz
+/docs/scripts/3rd_party/tesseract/tesseract-*.tar.bz2
+/docs/scripts/3rd_party/tesseract/tesseract-*.tbz
+/docs/scripts/3rd_party/tesseract/tesseract-*.tb2
+/docs/scripts/3rd_party/tesseract/tesseract-*.zip
+/docs/scripts/3rd_party/tesseract/*.traineddata.gz
+/docs/scripts/3rd_party/tesseract/*.traineddata.bz2
+/docs/scripts/3rd_party/tesseract/*.traineddata.zip
+
+# /modules/
+/modules/matterhorn-analysis-speech
+
+# /modules/matterhorn-admin-ui/
+/modules/matterhorn-admin-ui/TEST-Firefox_364_Mac_OS.FormField.xml
+/modules/matterhorn-admin-ui/TEST-Firefox_363_Mac_OS.FormField.xml
+/modules/matterhorn-admin-ui/target
+/modules/matterhorn-admin-ui/*.iml
+
+# /modules/matterhorn-caption-api/
+/modules/matterhorn-caption-api/target
+
+# /modules/matterhorn-caption-impl/
+/modules/matterhorn-caption-impl/target
+
+# /modules/matterhorn-capture-admin-service-api/
+/modules/matterhorn-capture-admin-service-api/bin
+/modules/matterhorn-capture-admin-service-api/target
+/modules/matterhorn-capture-admin-service-api/.settings
+/modules/matterhorn-capture-admin-service-api/.classpath
+/modules/matterhorn-capture-admin-service-api/.project
+
+# /modules/matterhorn-capture-admin-service-impl/
+/modules/matterhorn-capture-admin-service-impl/target
+/modules/matterhorn-capture-admin-service-impl/.settings
+/modules/matterhorn-capture-admin-service-impl/.classpath
+/modules/matterhorn-capture-admin-service-impl/.project
+
+# /modules/matterhorn-capture-agent-api/
+/modules/matterhorn-capture-agent-api/.project
+/modules/matterhorn-capture-agent-api/.classpath
+/modules/matterhorn-capture-agent-api/target
+/modules/matterhorn-capture-agent-api/.settings
+
+# /modules/matterhorn-capture-agent-impl/
+/modules/matterhorn-capture-agent-impl/target
+/modules/matterhorn-capture-agent-impl/bin
+/modules/matterhorn-capture-agent-impl/.project
+/modules/matterhorn-capture-agent-impl/.classpath
+/modules/matterhorn-capture-agent-impl/.settings
+/modules/matterhorn-capture-agent-impl/cleanTest
+/modules/matterhorn-capture-agent-impl/camera_out.mpg
+/modules/matterhorn-capture-agent-impl/screen_out.mpg
+/modules/matterhorn-capture-agent-impl/audio_out.mp3
+
+# /modules/matterhorn-capture-agent-impl/src/main/java/org/opencastproject/capture/pipeline/bins/consumers/
+/modules/matterhorn-capture-agent-impl/src/main/java/org/opencastproject/capture/pipeline/bins/consumers/.ConsumerType.java.swp
+
+# /modules/matterhorn-common/
+/modules/matterhorn-common/target
+
+# /modules/matterhorn-composer-ffmpeg/
+/modules/matterhorn-composer-ffmpeg/target
+/modules/matterhorn-composer-ffmpeg/bin
+/modules/matterhorn-composer-ffmpeg/.settings
+/modules/matterhorn-composer-ffmpeg/.project
+/modules/matterhorn-composer-ffmpeg/.classpath
+/modules/matterhorn-composer-ffmpeg/.clover
+
+# /modules/matterhorn-composer-service-api/
+/modules/matterhorn-composer-service-api/target
+/modules/matterhorn-composer-service-api/bin
+/modules/matterhorn-composer-service-api/.settings
+/modules/matterhorn-composer-service-api/.project
+/modules/matterhorn-composer-service-api/.classpath
+
+# /modules/matterhorn-conductor/
+/modules/matterhorn-conductor/target
+/modules/matterhorn-conductor/bin
+/modules/matterhorn-conductor/.settings
+/modules/matterhorn-conductor/.project
+/modules/matterhorn-conductor/.classpath
+
+# /modules/matterhorn-confidence-monitoring-ui/
+/modules/matterhorn-confidence-monitoring-ui/target
+
+# /modules/matterhorn-db/
+/modules/matterhorn-db/target
+
+# /modules/matterhorn-dictionary-api/
+/modules/matterhorn-dictionary-api/target
+/modules/matterhorn-dictionary-api/bin
+/modules/matterhorn-dictionary-api/.eclipse
+/modules/matterhorn-dictionary-api/.classpath
+/modules/matterhorn-dictionary-api/.settings
+/modules/matterhorn-dictionary-api/.clover
+
+# /modules/matterhorn-dictionary-impl/
+/modules/matterhorn-dictionary-impl/.clover
+/modules/matterhorn-dictionary-impl/.settings
+/modules/matterhorn-dictionary-impl/.classpath
+/modules/matterhorn-dictionary-impl/.project
+/modules/matterhorn-dictionary-impl/bin
+/modules/matterhorn-dictionary-impl/target
+
+# /modules/matterhorn-distribution-service-api/
+/modules/matterhorn-distribution-service-api/target
+
+# /modules/matterhorn-distribution-service-common/
+/modules/matterhorn-distribution-service-common/target
+
+# /modules/matterhorn-distribution-service-download/
+/modules/matterhorn-distribution-service-download/target
+
+# /modules/matterhorn-distribution-service-itunesu/
+/modules/matterhorn-distribution-service-itunesu/target
+
+# /modules/matterhorn-distribution-service-streaming/
+/modules/matterhorn-distribution-service-streaming/target
+
+# /modules/matterhorn-distribution-service-streaming/src/
+/modules/matterhorn-distribution-service-streaming/src/test
+
+# /modules/matterhorn-distribution-service-youtube/
+/modules/matterhorn-distribution-service-youtube/target
+
+# /modules/matterhorn-dublincore/
+/modules/matterhorn-dublincore/target
+
+# /modules/matterhorn-engage-player/
+/modules/matterhorn-engage-player/target
+
+# /modules/matterhorn-engage-ui/
+/modules/matterhorn-engage-ui/target
+
+# /modules/matterhorn-fileupload/
+/modules/matterhorn-fileupload/target
+
+# /modules/matterhorn-ingest-service-api/
+/modules/matterhorn-ingest-service-api/target
+
+# /modules/matterhorn-ingest-service-impl/
+/modules/matterhorn-ingest-service-impl/target
+/modules/matterhorn-ingest-service-impl/.settings
+/modules/matterhorn-ingest-service-impl/.classpath
+/modules/matterhorn-ingest-service-impl/.project
+/modules/matterhorn-ingest-service-impl/.clover
+
+# /modules/matterhorn-inspection-service-api/
+/modules/matterhorn-inspection-service-api/target
+
+# /modules/matterhorn-inspection-service-impl/
+/modules/matterhorn-inspection-service-impl/target
+
+# /modules/matterhorn-kernel/
+/modules/matterhorn-kernel/target
+
+# /modules/matterhorn-mediapackage-manipulator/
+/modules/matterhorn-mediapackage-manipulator/target
+
+# /modules/matterhorn-metadata-api/
+/modules/matterhorn-metadata-api/target
+
+# /modules/matterhorn-mpeg7/
+/modules/matterhorn-mpeg7/target
+
+# /modules/matterhorn-runtime-info-ui/
+/modules/matterhorn-runtime-info-ui/target
+
+# /modules/matterhorn-scheduler-api/
+/modules/matterhorn-scheduler-api/target
+
+# /modules/matterhorn-scheduler-impl/
+/modules/matterhorn-scheduler-impl/target
+/modules/matterhorn-scheduler-impl/bin
+/modules/matterhorn-scheduler-impl/derby.log
+/modules/matterhorn-scheduler-impl/.project
+/modules/matterhorn-scheduler-impl/.classpath
+/modules/matterhorn-scheduler-impl/.settings
+
+# /modules/matterhorn-search-service-api/
+/modules/matterhorn-search-service-api/target
+
+# /modules/matterhorn-search-service-feeds/
+/modules/matterhorn-search-service-feeds/target
+
+# /modules/matterhorn-search-service-impl/
+/modules/matterhorn-search-service-impl/.clover
+/modules/matterhorn-search-service-impl/target
+
+# /modules/matterhorn-series-service-api/
+/modules/matterhorn-series-service-api/target
+
+# /modules/matterhorn-series-service-impl/
+/modules/matterhorn-series-service-impl/target
+
+# /modules/matterhorn-serviceregistry/
+/modules/matterhorn-serviceregistry/target
+
+# /modules/matterhorn-static/
+/modules/matterhorn-static/target
+
+# /modules/matterhorn-test-harness/
+/modules/matterhorn-test-harness/target
+
+# /modules/matterhorn-test-harness/src/main/resources/selenium/admin/
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlCaptureAgents
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlScheduleRecording
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlSuite
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlSeriesList
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlViewInfoTest
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlStatistics
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlVerifyInspect
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlRedirectToRecordings
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlUploadRecording
+/modules/matterhorn-test-harness/src/main/resources/selenium/admin/.htmlAddSeries
+
+# /modules/matterhorn-textanalyzer-impl/
+/modules/matterhorn-textanalyzer-impl/target
+
+# /modules/matterhorn-textextractor-ocropus/
+/modules/matterhorn-textextractor-ocropus/target
+
+# /modules/matterhorn-videosegmenter-impl/
+/modules/matterhorn-videosegmenter-impl/target
+
+# /modules/matterhorn-webconsole/
+/modules/matterhorn-webconsole/target
+
+# /modules/matterhorn-workflow-service-api/
+/modules/matterhorn-workflow-service-api/target
+/modules/matterhorn-workflow-service-api/bin
+/modules/matterhorn-workflow-service-api/.project
+/modules/matterhorn-workflow-service-api/.classpath
+/modules/matterhorn-workflow-service-api/.settings
+
+# /modules/matterhorn-workflow-service-impl/
+/modules/matterhorn-workflow-service-impl/target
+/modules/matterhorn-workflow-service-impl/bin
+/modules/matterhorn-workflow-service-impl/derby.log
+/modules/matterhorn-workflow-service-impl/.project
+/modules/matterhorn-workflow-service-impl/.classpath
+/modules/matterhorn-workflow-service-impl/.settings
+/modules/matterhorn-workflow-service-impl/.clover
+
+# /modules/matterhorn-working-file-repository-service-api/
+/modules/matterhorn-working-file-repository-service-api/target
+
+# /modules/matterhorn-working-file-repository-service-impl/
+/modules/matterhorn-working-file-repository-service-impl/.clover
+/modules/matterhorn-working-file-repository-service-impl/target
+
+# /modules/matterhorn-workspace-api/
+/modules/matterhorn-workspace-api/target
+
+# /modules/matterhorn-workspace-impl/
+/modules/matterhorn-workspace-impl/.clover
+/modules/matterhorn-workspace-impl/target
+
+# /src/
+/src/main
