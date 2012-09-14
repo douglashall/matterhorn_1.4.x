@@ -341,12 +341,22 @@ public abstract class AbstractEpisodeServiceRestEndpoint {
           fileName = fileName.concat(mimeType.getSubtype());
         }
 
+        // Determine content length
+        byte[] bytes = new byte[0];
+        try {
+          bytes = IOUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+          logger.error("Failed to read input stream of media package element", e);
+        }
+
         // Write the file contents back
+        final byte[] content = bytes;
+        long contentLength = element.getSize() >= 0 ? element.getSize() : bytes.length;
         return Response
                 .ok(new StreamingOutput() {
                   @Override public void write(OutputStream os) throws IOException, WebApplicationException {
                     try {
-                      IOUtils.copy(inputStream, os);
+                      os.write(content);
                     } catch (IOException e) {
                       Throwable cause = e.getCause();
                       if (cause == null || !"Broken pipe".equals(cause.getMessage()))
@@ -357,7 +367,7 @@ public abstract class AbstractEpisodeServiceRestEndpoint {
                   }
                 })
                 .header("Content-disposition", "attachment; filename=" + fileName)
-                .header("Content-length", element.getSize())
+                .header("Content-length", contentLength)
                 .type(mimeType.asString())
                 .build();
       }
