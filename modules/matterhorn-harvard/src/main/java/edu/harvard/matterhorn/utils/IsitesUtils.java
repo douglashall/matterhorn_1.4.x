@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 
 /**
  * @author doh385
@@ -53,12 +54,17 @@ public final class IsitesUtils {
     rss.addContent(item);
 
     Element title = new Element("title");
-    title.addContent(mediaPackage.getTitle());
+    SimpleDateFormat sdf = new SimpleDateFormat("MMMM d");
+    title.addContent(mediaPackage.getTitle() + " " + sdf.format(mediaPackage.getDate()));
     item.addContent(title);
 
     Element externalId = new Element("externalId", vptNS);
     externalId.addContent(mediaPackage.getIdentifier().toString());
     item.addContent(externalId);
+
+    Element duration = new Element("duration", vptNS);
+    duration.addContent(String.valueOf(mediaPackage.getDuration()));
+    item.addContent(duration);
 
     Attachment[] attachments = mediaPackage.getAttachments(MediaPackageElementFlavor
             .parseFlavor("presentation/player+preview"));
