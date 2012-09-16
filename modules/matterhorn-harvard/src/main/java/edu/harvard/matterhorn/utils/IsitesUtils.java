@@ -54,8 +54,8 @@ public final class IsitesUtils {
     rss.addContent(item);
 
     Element title = new Element("title");
-    SimpleDateFormat sdf = new SimpleDateFormat("MMMM d");
-    title.addContent(mediaPackage.getTitle() + " " + sdf.format(mediaPackage.getDate()));
+    SimpleDateFormat recordingSdf = new SimpleDateFormat("MMMM d");
+    title.addContent(mediaPackage.getTitle() + " " + recordingSdf.format(mediaPackage.getDate()));
     item.addContent(title);
 
     Element externalId = new Element("externalId", vptNS);
@@ -63,7 +63,8 @@ public final class IsitesUtils {
     item.addContent(externalId);
 
     Element duration = new Element("duration", vptNS);
-    duration.addContent(String.valueOf(mediaPackage.getDuration()));
+    long seconds = mediaPackage.getDuration() / 1000;
+    duration.addContent(String.format("%d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, (seconds % 60)));
     item.addContent(duration);
 
     Attachment[] attachments = mediaPackage.getAttachments(MediaPackageElementFlavor

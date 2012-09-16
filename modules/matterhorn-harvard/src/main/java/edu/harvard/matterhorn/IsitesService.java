@@ -117,6 +117,8 @@ public class IsitesService implements ManagedService {
       nvps.add(new BasicNameValuePair("authkey", authKey));
       nvps.add(new BasicNameValuePair("md5input", md5Input));
       httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+      logger.info("Sending autopub request to iSites");
+      logger.info(rss);
       HttpResponse response = httpclient.execute(httpPost);
 
       logger.info(response.getStatusLine().toString());
