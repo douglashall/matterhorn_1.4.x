@@ -15,10 +15,16 @@
  */
 package edu.harvard.matterhorn.utils;
 
+import static org.opencastproject.util.data.Collections.flatMap;
+
 import org.opencastproject.mediapackage.Attachment;
 import org.opencastproject.mediapackage.MediaPackage;
 import org.opencastproject.mediapackage.MediaPackageElementFlavor;
 import org.opencastproject.mediapackage.Track;
+import org.opencastproject.metadata.api.MetadataValue;
+import org.opencastproject.metadata.api.StaticMetadata;
+import org.opencastproject.metadata.api.StaticMetadataService;
+import org.opencastproject.util.data.Function;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -29,6 +35,11 @@ import org.slf4j.LoggerFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author doh385
@@ -42,7 +53,7 @@ public final class IsitesUtils {
 
   }
 
-  public static Document mediaPackageToMediaRss(MediaPackage mediaPackage) {
+  public static Document mediaPackageToMediaRss(MediaPackage mediaPackage, List<StaticMetadata> catalogs) {
     Element rss = new Element("rss");
     Document doc = new Document(rss);
     Namespace mediaNS = Namespace.getNamespace("media", "http://search.yahoo.com/mrss");
@@ -57,6 +68,17 @@ public final class IsitesUtils {
     SimpleDateFormat recordingSdf = new SimpleDateFormat("MMMM d");
     title.addContent(mediaPackage.getTitle() + " " + recordingSdf.format(mediaPackage.getDate()));
     item.addContent(title);
+
+    if (catalogs.size() > 0) {
+      StaticMetadata catalog = catalogs.get(0);
+      List<MetadataValue<String>> values = catalog.getDescription();
+      if (values.size() > 0) {
+        MetadataValue<String> value = values.get(0);
+        Element description = new Element("description", vptNS);
+        description.addContent(value.getValue());
+        item.addContent(description);
+      }
+    }
 
     Element externalId = new Element("externalId", vptNS);
     externalId.addContent(mediaPackage.getIdentifier().toString());
@@ -111,6 +133,17 @@ public final class IsitesUtils {
       logger.error("Failed to encode " + input + " as MD5", e);
     }
     return hexString.toString();
+  }
+
+  public static List<StaticMetadata> getMetadata(final List<StaticMetadataService> mdServices, final MediaPackage mp) {
+    return flatMap(mdServices, new ArrayList<StaticMetadata>(),
+            new Function<StaticMetadataService, Collection<StaticMetadata>>() {
+              @Override
+              public Collection<StaticMetadata> apply(StaticMetadataService s) {
+                StaticMetadata md = s.getMetadata(mp);
+                return md != null ? Arrays.asList(md) : Collections.<StaticMetadata> emptyList();
+              }
+            });
   }
 
 }

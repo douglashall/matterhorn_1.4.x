@@ -11,6 +11,12 @@
     </service>
     <reference name="seriesService" interface="org.opencastproject.series.api.SeriesService"
 	    cardinality="1..1" policy="static" bind="setSeriesService" />
+    <reference name="staticMetadata"
+         interface="org.opencastproject.metadata.api.StaticMetadataService"
+         cardinality="1..n"
+         policy="dynamic"
+         bind="setStaticMetadataService"
+         unbind="unsetStaticMetadataService"/>
   </scr:component>
 
 </scr:components>

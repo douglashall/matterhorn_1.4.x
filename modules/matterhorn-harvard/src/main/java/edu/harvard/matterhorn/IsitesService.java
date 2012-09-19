@@ -16,6 +16,7 @@
 package edu.harvard.matterhorn;
 
 import org.opencastproject.mediapackage.MediaPackage;
+import org.opencastproject.metadata.api.StaticMetadataService;
 import org.opencastproject.metadata.dublincore.DublinCoreCatalog;
 import org.opencastproject.metadata.dublincore.DublinCoreValue;
 import org.opencastproject.series.api.SeriesService;
@@ -59,6 +60,7 @@ public class IsitesService implements ManagedService {
   private String isitesPublishUrl;
 
   private SeriesService seriesService;
+  private List<StaticMetadataService> mdServices = new ArrayList<StaticMetadataService>();
 
   /**
    * @param seriesService
@@ -66,6 +68,16 @@ public class IsitesService implements ManagedService {
    */
   public void setSeriesService(SeriesService seriesService) {
     this.seriesService = seriesService;
+  }
+
+  /** Dynamic reference. */
+  public void setStaticMetadataService(StaticMetadataService mdService) {
+    logger.info("Adding StaticMetadataService");
+    this.mdServices.add(mdService);
+  }
+
+  public void unsetStaticMetadataService(StaticMetadataService mdService) {
+    this.mdServices.remove(mdService);
   }
 
   public void activate(ComponentContext ctx) throws Exception {
@@ -79,7 +91,7 @@ public class IsitesService implements ManagedService {
   public void publish(MediaPackage mediaPackage) {
     logger.info("Publishing media package to iSites");
 
-    Document doc = IsitesUtils.mediaPackageToMediaRss(mediaPackage);
+    Document doc = IsitesUtils.mediaPackageToMediaRss(mediaPackage, IsitesUtils.getMetadata(mdServices, mediaPackage));
     String seriesId = mediaPackage.getSeries();
     if (seriesId == null) {
       logger.error("Failed to publish media package to iSites; No series associated with media package "
