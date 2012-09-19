@@ -65,7 +65,7 @@ public final class IsitesUtils {
     rss.addContent(item);
 
     Element title = new Element("title");
-    SimpleDateFormat recordingSdf = new SimpleDateFormat("MMMM d");
+    SimpleDateFormat recordingSdf = new SimpleDateFormat("EEEE MMMM d, yyyy");
     title.addContent(mediaPackage.getTitle() + " " + recordingSdf.format(mediaPackage.getDate()));
     item.addContent(title);
 
