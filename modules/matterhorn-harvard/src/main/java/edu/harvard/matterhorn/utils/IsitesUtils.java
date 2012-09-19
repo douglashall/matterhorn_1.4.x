@@ -69,8 +69,7 @@ public final class IsitesUtils {
     title.addContent(mediaPackage.getTitle() + " " + recordingSdf.format(mediaPackage.getDate()));
     item.addContent(title);
 
-    if (catalogs.size() > 0) {
-      StaticMetadata catalog = catalogs.get(0);
+    for (StaticMetadata catalog : catalogs) {
       List<MetadataValue<String>> values = catalog.getDescription();
       if (values.size() > 0) {
         MetadataValue<String> value = values.get(0);
