@@ -109,7 +109,7 @@ public class IsitesService implements ManagedService {
       DublinCoreCatalog catalog = this.seriesService.getSeries(seriesId);
       List<DublinCoreValue> shortTitleValues = catalog.get(DublinCoreCatalog.PROPERTY_IS_PART_OF);
       if (shortTitleValues != null && shortTitleValues.size() > 0) {
-        courseKey += shortTitleValues.get(0).getValue().replaceAll(" ", "").toLowerCase();
+        courseKey += shortTitleValues.get(0).getValue().replaceAll(" ", "");
       }
 
       XMLOutputter outputter = new XMLOutputter();
