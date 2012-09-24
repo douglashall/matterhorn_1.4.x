@@ -287,7 +287,7 @@
               </select>
             </li>
             <li>
-              <label class="scheduler-label" for="inputList" id="inputLabel"><span class="scheduler-required-text">* </span><span id="i18n_input_label"></span>:</label>
+              <label class="scheduler-label" for="inputList" id="inputLabel"></label>
               <div class="scheduler-radio-list">
                 <div id="inputList"></div>
               </div>
@@ -492,7 +492,7 @@
                 </select>
               </li>
               <li>
-                <label class="scheduler-label" id="inputLabel"><span class="scheduler-required-text">* </span><span id="i18n_input_label">Inputs</span>:</label>
+                <label class="scheduler-label" id="inputLabel"></label>
                 <div class="scheduler-radio-list">
                   <div id="recurInputList"></div>
                 </div>

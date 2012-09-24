@@ -307,6 +307,8 @@ var ocScheduler = (function() {
     var payload = {};
     var error = false;
 
+    sched.registerChannelChange();
+    
     hideUserMessages();
     sched.checkForConflictingEvents();
     if(ocScheduler.conflictingEvents) {
@@ -384,6 +386,7 @@ var ocScheduler = (function() {
     if(agent){
       $.get('/capture-admin/agents/' + agent + '/configuration.xml',
       function(doc){
+    	var channelPresent = false
         var devNames = [];
         var capabilities = [];
         $.each($('item', doc), function(a, i){
@@ -403,14 +406,17 @@ var ocScheduler = (function() {
             }
           } else if(s == 'capture.device.timezone') {
             sched.timezone = $(i).text();
+          } else if(s === 'capture.device.schedulerForm.channel') {
+        	channelPresent = true;
           }
         });
         if(devNames.length > 0) {
           capabilities = devNames;
         }
         if(capabilities.length){
-          sched.displayCapabilities(capabilities);
+          sched.displayCapabilities(capabilities, channelPresent);
         }else{
+          sched.displayCapabilities(capabilities, false);
           sched.tzDiff = 0; //No agent timezone could be found, assume local time.
           $('#inputList').html('Agent defaults will be used.');
           delete sched.dublinCore.components.agentTimeZone;
@@ -418,6 +424,9 @@ var ocScheduler = (function() {
         sched.checkForConflictingEvents();
       });
     } else {
+      if ($('#ChannelSelection').length > 0) {
+        $('#chan_sel').remove();
+      }
       // no valid agent, change time to local form what ever it was before.
       delete sched.dublinCore.components.agentTimeZone; //Being empty will end up defaulting to the server's Timezone.
       if(sched.type === SINGLE_EVENT){
@@ -428,14 +437,41 @@ var ocScheduler = (function() {
     };
   }
 
-  sched.displayCapabilities = function(capabilities) {
-    $(this.inputList).append('<ul class="oc-ui-checkbox-list">');
-    $.each(capabilities, function(i, v) {
-      $(sched.inputList).append('<li><input type="checkbox" id="' + v + '" value="' + v + '">&nbsp;<label for="' + v +'">' + v.charAt(0).toUpperCase() + v.slice(1).toLowerCase() + '</label></li>');
-    });
-    if(this.mode === CREATE_MODE) {
-      $(':input', this.inputList).attr('checked', 'checked');
+  /* Channel change handler */
+  sched.registerChannelChange = function() {
+    this.capture.components.channel.value = $('#ChannelSelection').val();
+  };
+
+  sched.displayCapabilities = function(capabilities, channelPresent) {
+    $('#inputLabel').find('span').remove();
+    $('#inputLabel').text('');
+    if (channelPresent == false) {
+      $('#inputLabel').append('<span class="scheduler-required-text">* </span><span id="i18n_input_label"></span>Input(s):');
+      $(this.inputList).append('<ul class="oc-ui-checkbox-list">');
+      $.each(capabilities, function(i, v) {
+        $(sched.inputList).append('<li><input type="checkbox" id="' + v + '" value="' + v + '">&nbsp;<label for="' + v +'">' + v.charAt(0).toUpperCase() + v.slice(1).toLowerCase() + '</label></li>');
+      });
+      if(this.mode === CREATE_MODE) {
+        $(':input', this.inputList).attr('checked', 'checked');
+      }
+    } else {
+      console.log("channelPresent = true");
+      if ($('#ChannelSelection').length == 0) {
+        console.log("channelSelection.length = 0");
+        $(sched.inputList).append('<li id="chan_sel">Channel <select id="ChannelSelection"></select></li>');
+        for (var i=1; i<=25; i++) {
+          $('#ChannelSelection').append($("<option></option>")
+          .attr("value",i)
+          .text(i));
+        }
+      }
+    } else {
+      console.log("channelPresent = false");
+      if ($('#ChannelSelection').length > 0) {
+        $('#chan_sel').remove();
+      }
     }
+    this.capture.components.channel.value = 1;
     $(this.inputList).append('</ul>');
     this.capture.components.resources.setFields(capabilities);
     if(ocUtils.getURLParam('edit')) {
@@ -823,6 +859,10 @@ var ocScheduler = (function() {
       }
     });
 
+    agentComps.channel = new ocAdmin.Component(['ChannelSelection'], {
+      key: 'channel'
+    });
+    
     agentComps.workflowDefinition = new ocAdmin.Component(['workflowSelector'], {
       key: 'org.opencastproject.workflow.definition'
     });
