@@ -454,7 +454,7 @@ var ocScheduler = (function() {
       if(this.mode === CREATE_MODE) {
         $(':input', this.inputList).attr('checked', 'checked');
       }
-    } else {
+    } else if ((channelPresent == true)) {
       console.log("channelPresent = true");
       if ($('#ChannelSelection').length == 0) {
         console.log("channelSelection.length = 0");
