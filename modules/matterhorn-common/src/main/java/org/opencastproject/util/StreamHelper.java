@@ -17,6 +17,7 @@
 package org.opencastproject.util;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,6 +30,8 @@ import java.io.PrintWriter;
  * Helper class to handle Runtime.exec() output.
  */
 public class StreamHelper extends Thread {
+  /** The logger */
+  private static final Logger logger = LoggerFactory.getLogger(StreamHelper.class);
 
   /** The input stream */
   private InputStream inputStream;
@@ -43,7 +46,7 @@ public class StreamHelper extends Thread {
   protected PrintWriter writer = null;
 
   /** Append messages to this logger */
-  protected Logger logger = null;
+  protected Logger processLogger = null;
 
   /** True to keep reading the streams */
   protected boolean keepReading = true;
@@ -77,13 +80,13 @@ public class StreamHelper extends Thread {
    * 
    * @param inputStream
    *          the input stream to read from
-   * @param logger
+   * @param processLogger
    *          the logger to append to
    * @param contentBuffer
    *          the buffer to write the captured output to
    */
-  public StreamHelper(InputStream inputStream, Logger logger, StringBuffer contentBuffer) {
-    this(inputStream, null, logger, contentBuffer);
+  public StreamHelper(InputStream inputStream, Logger processLogger, StringBuffer contentBuffer) {
+    this(inputStream, null, processLogger, contentBuffer);
   }
 
   /**
@@ -109,17 +112,17 @@ public class StreamHelper extends Thread {
    *          the input stream to read from
    * @param redirect
    *          a stream to also redirect the captured output to
-   * @param logger
+   * @param processLogger
    *          the logger to append to
    * @param contentBuffer
    *          the buffer to write the captured output to
    */
-  public StreamHelper(InputStream inputStream, OutputStream redirect, Logger logger, StringBuffer contentBuffer) {
+  public StreamHelper(InputStream inputStream, OutputStream redirect, Logger processLogger, StringBuffer contentBuffer) {
     this.inputStream = inputStream;
     this.outputStream = redirect;
-    this.logger = logger;
+    this.processLogger = processLogger;
     this.contentBuffer = contentBuffer;
-    start(); // FIXME This class should either be final, or should not start threads in the constructor.
+    start();
   }
 
   /**
@@ -135,28 +138,27 @@ public class StreamHelper extends Thread {
   @Override
   public void run() {
     BufferedReader reader = null;
-    InputStreamReader isreader = null;
     try {
       if (outputStream != null) {
         writer = new PrintWriter(outputStream);
       }
-      isreader = new InputStreamReader(inputStream);
-      reader = new BufferedReader(isreader);
-      if (reader.ready()) {
-        String line = reader.readLine();
-        while (keepReading && reader.ready() && line != null) {
-          append(line);
-          log(line);
+      reader = new BufferedReader(new InputStreamReader(inputStream));
+      String line = reader.readLine();
+      while (keepReading && line != null) {
+        append(line);
+        log(line);
+        line = null;
+        if (reader.ready())
           line = reader.readLine();
-        }
-        if (writer != null)
-          writer.flush();
       }
-    } catch (IOException ioe) {
-      logger.error("Error reading process stream: {}", ioe.getMessage(), ioe);
+      if (writer != null)
+        writer.flush();
+    } catch (IOException e) {
+      logger.error("Error reading process stream: {}", e.getMessage(), e);
+    } catch (Throwable t) {
+      logger.debug("Unknown error while reading from process input: {}", t.getMessage());
     } finally {
       IoSupport.closeQuietly(reader);
-      IoSupport.closeQuietly(isreader);
       IoSupport.closeQuietly(writer);
     }
   }
@@ -189,8 +191,8 @@ public class StreamHelper extends Thread {
    *          the stream output
    */
   protected void log(String output) {
-    if (logger != null) {
-      logger.info(output);
+    if (processLogger != null) {
+      processLogger.info(output);
     }
   }
 
