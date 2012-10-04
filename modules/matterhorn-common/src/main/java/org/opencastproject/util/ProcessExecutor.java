@@ -16,8 +16,9 @@
 
 package org.opencastproject.util;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +32,10 @@ import java.util.List;
  */
 public class ProcessExecutor<T extends Exception> {
 
-  private boolean redirectErrorStream = true;
+  /** The logging facility */
+  private static final Logger logger = LoggerFactory.getLogger(ProcessExecutor.class);
+
+  private boolean redirectErrorStream = false;
   private String[] commandLine;
 
   protected ProcessExecutor(String commandLine) {
@@ -73,35 +77,47 @@ public class ProcessExecutor<T extends Exception> {
   }
 
   public final void execute() throws ProcessExcecutorException {
-    BufferedReader in = null;
     Process process = null;
     StreamHelper errorStreamHelper = null;
+    StreamHelper inputStreamHelper = null;
     try {
-      // create process.
-      // no special working dir is set which means the working dir of the
+
+      // no special working directory is set which means the working directory of the
       // current java process is used.
       ProcessBuilder pbuilder = new ProcessBuilder(commandLine);
       pbuilder.redirectErrorStream(redirectErrorStream);
       process = pbuilder.start();
-      // Consume error stream if necessary
+
+      // Consume the error stream if it is not redirected and merged into stdin
       if (!redirectErrorStream) {
-        errorStreamHelper = new StreamHelper(process.getErrorStream());
+        errorStreamHelper = new StreamHelper(process.getErrorStream()) {
+          protected void append(String output) {
+            onStderr(output);
+          }
+        };
       }
-      // Read input and
-      in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-      String line;
-      while ((line = in.readLine()) != null) {
-        if (!onLineRead(line))
-          break;
-      }
+
+      // Consume stdin (the processe's stdout)
+      inputStreamHelper = new StreamHelper(process.getInputStream()) {
+        protected void append(String output) {
+          onStdout(output);
+        }
+      };
 
       // wait until the task is finished
       process.waitFor();
       int exitCode = process.exitValue();
+
+      // handle the case where the process is done before the stream helper
+      if (errorStreamHelper != null)
+        errorStreamHelper.join();
+      inputStreamHelper.join();
+
+      // Allow subclasses to react to the process result
       onProcessFinished(exitCode);
     } catch (Throwable t) {
       String msg = null;
-      if (errorStreamHelper != null) {
+      if (errorStreamHelper != null && errorStreamHelper.contentBuffer != null) {
         msg = errorStreamHelper.contentBuffer.toString();
       }
 
@@ -110,11 +126,32 @@ public class ProcessExecutor<T extends Exception> {
       throw new ProcessExcecutorException(msg, t);
     } finally {
       IoSupport.closeQuietly(process);
-      IoSupport.closeQuietly(in);
     }
   }
 
-  protected boolean onLineRead(String line) {
+  /**
+   * A line of output has been read from the processe's stderr. Subclasses should override this method in order to deal
+   * with process output.
+   * 
+   * @param line
+   *          the line from <code>stderr</code>
+   * @return
+   */
+  protected boolean onStderr(String line) {
+    logger.warn(line);
+    return false;
+  }
+
+  /**
+   * A line of output has been read from the processe's stdout. Subclasses should override this method in order to deal
+   * with process output.
+   * 
+   * @param line
+   *          the line from <code>stdout</code>
+   * @return
+   */
+  protected boolean onStdout(String line) {
+    logger.debug(line);
     return false;
   }
 
