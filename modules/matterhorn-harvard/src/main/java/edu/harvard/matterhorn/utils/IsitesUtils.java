@@ -113,6 +113,13 @@ public final class IsitesUtils {
       group.addContent(content);
     }
 
+    for (Track track : mediaPackage.getTracks(MediaPackageElementFlavor.parseFlavor("presenter/trimmed"))) {
+      Element content = new Element("content", mediaNS);
+      content.setAttribute("type", "composite");
+      content.setAttribute("url", track.getURI().toString());
+      group.addContent(content);
+    }
+
     return doc;
   }
 
