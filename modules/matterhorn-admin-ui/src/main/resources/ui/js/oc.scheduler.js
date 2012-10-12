@@ -382,7 +382,7 @@ var ocScheduler = (function() {
     {
       key: 'agentTimeZone',
       nsPrefix: 'oc',
-      nsURI: 'http://www.opencastproject.org/matterhorn/',
+      nsURI: 'http://www.opencastproject.org/matterhorn/'
     });
     if(agent){
       $.get('/capture-admin/agents/' + agent + '/configuration.xml',
@@ -422,7 +422,7 @@ var ocScheduler = (function() {
           $('#inputList').html('Agent defaults will be used.');
           delete sched.dublinCore.components.agentTimeZone;
         }
-        sched.checkForConflictingEvents();
+        sched.checkForConflictingEvents(false);
       });
     } else {
       if ($('#ChannelSelection').length > 0) {
@@ -600,14 +600,19 @@ var ocScheduler = (function() {
     }
   }
 
-  sched.checkForConflictingEvents = function() {
-    var start, end;
+  sched.checkForConflictingEvents = function(hide_notice) {
+    var start, end, now, date_changed;
     var data = {
       device: '',
       start: 0,
       end: 0
     };
     sched.conflictingEvents = false;
+    date_changed = false;
+    if (hide_notice !== false){
+      $('#noticeContainer').hide();
+      $('#noticeContainer li').hide();
+    }
     $('#missingFieldsContainer').hide();
     $('#missingFieldsContainer li').hide();
     $('#errorConflict').hide();
@@ -628,7 +633,18 @@ var ocScheduler = (function() {
     } else if(sched.type === MULTIPLE_EVENTS) {
       if(sched.components.recurrenceStart.validate().length === 0 && sched.components.recurrenceEnd.validate().length === 0 &&
         sched.dublinCore.components.recurrence.validate().length === 0 && sched.components.recurrenceDuration.validate().length === 0){
-        data.start = sched.components.recurrenceStart.getValue();
+    	now = new Date();
+    	start = sched.components.recurrenceStart.getValue();
+    	while(start<now){
+    	  date_changed = true;
+          start = start + 24 * 3600 * 1000; 
+    	}
+    	if(date_changed){ 
+    	      $('#noticeContainer').show();
+    	      $('#noticeStartDateMoved').show();
+        }
+        sched.components.recurrenceStart.setValue(start);
+    	data.start = sched.components.recurrenceStart.getValue();
         data.end = sched.components.recurrenceEnd.getValue();
         data.duration = sched.components.recurrenceDuration.getValue();
         data.rrule = sched.dublinCore.components.recurrence.getValue();
@@ -777,7 +793,7 @@ var ocScheduler = (function() {
             url: SERIES_URL + '/',
             data: {
               series: series,
-              acl: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><acl xmlns="org.opencastproject.security"><ace><role>' + anonymous_role + '</role><action>read</action><allow>true</allow></ace></acl>'
+              acl: '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><acl xmlns="http://org.opencastproject.security"><ace><role>' + anonymous_role + '</role><action>read</action><allow>true</allow></ace></acl>'
             },
             dataType: 'xml',
             success: function(data){
@@ -944,6 +960,14 @@ var ocScheduler = (function() {
               startdatetime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), this.fields.recurStartTimeHour.val(), this.fields.recurStartTimeMin.val());
               if(startdatetime.getTime() >= now.getTime()) {
                 return [];
+              } else {
+            	// set the start date to the next occurance of the given time from now
+            	startdatetime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), this.fields.recurStartTimeHour.val(), this.fields.recurStartTimeMin.val());
+            	if(startdatetime.getTime() < now.getTime()) {
+                  startdatetime = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1, this.fields.recurStartTimeHour.val(), this.fields.recurStartTimeMin.val());
+            	}
+            	this.fields.recurStart.datepicker('setDate', date)
+				return [];
               }
             }
           }

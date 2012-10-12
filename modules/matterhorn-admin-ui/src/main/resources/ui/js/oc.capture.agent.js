@@ -50,7 +50,8 @@ ocCaptureAgent = new (function ()
         var devices,devices_arr;
         if (b==="url"){
           if (property=="") property="#";
-          else if(property.lastIndexOf("http://")!=0) property = "http://"+property;	
+          else if(property.lastIndexOf("http://")!=0 && property.lastIndexOf("https://")!=0)
+            property = "http://"+property;
         }			
         if (b==="name") {
           $.ajax({
@@ -89,7 +90,7 @@ ocCaptureAgent = new (function ()
             var index = $.inArray( prop[2].toLowerCase(), devices_arr);
             if ( index != -1) {														
               agent.devices[index]["properties"].push({
-                "key":name.trim(),
+                "key":$.trim(name),
                 "value":device.value
               });	
             }
