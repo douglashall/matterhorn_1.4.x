@@ -522,7 +522,11 @@
       <artifactId>spring-security-cas</artifactId>
       <version>${springsecurity.version}</version>
     </dependency>
-
+    <dependency> 
+      <groupId>org.jasig.cas</groupId> 
+      <artifactId>com.springsource.org.jasig.cas.client</artifactId> 
+      <version>3.1.12</version> 
+    </dependency>
     <dependency>
       <groupId>org.jasig.cas.client</groupId>
       <artifactId>cas-client-core</artifactId>
@@ -533,6 +537,11 @@
       <groupId>org.opensaml</groupId>
       <artifactId>com.springsource.org.opensaml</artifactId>
       <version>1.1.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xml</groupId>
+      <artifactId>com.springsource.org.apache.xml.security</artifactId>
+      <version>1.4.2</version>
     </dependency>
 
     <!--  Optional: LDAP -->
@@ -585,6 +594,21 @@
             <configuration>
               <target if="deployTo">
                 <copy todir="${deployTo}/lib/ext" failonerror="false">
+                  <fileset dir="${project.build.directory}/dependency"
+                    includes="**/*" />
+                </copy>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>extract-to-felix</id>
+            <phase>install</phase>
+            <configuration>
+              <target if="unpackTo">
+                <copy todir="${unpackTo}/lib/ext" failonerror="false">
                   <fileset dir="${project.build.directory}/dependency"
                     includes="**/*" />
                 </copy>
