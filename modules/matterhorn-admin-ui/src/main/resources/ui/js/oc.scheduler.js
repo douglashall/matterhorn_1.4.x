@@ -32,6 +32,9 @@ var ocScheduler = (function() {
   var SINGLE_EVENT      = 3;
   var MULTIPLE_EVENTS   = 4;
   var SUBMIT_MODE       = 5;
+  
+  // Define dcterms namespace
+  $.xmlns["dcterms"] = "http://purl.org/dc/terms/";
 
   sched.mode              = CREATE_MODE;
   sched.type              = SINGLE_EVENT;
@@ -62,7 +65,7 @@ var ocScheduler = (function() {
     this.registerCatalogs();
     this.registerEventHandlers();
 
-    ocWorkflow.init($('#workflowSelector'), $('#workflowConfigContainer'));
+    ocWorkflow.init($('#workflowSelector'), $('#workflowConfigContainer'), ['schedule']);
 
     if(this.type === SINGLE_EVENT){
       this.agentList = '#agent';
@@ -143,7 +146,7 @@ var ocScheduler = (function() {
         $.ajax({
           url: SERIES_URL + '/series.json',
           data: {
-            q: request.term,
+        	seriesTitle: request.term,
             sort: 'TITLE'
           },
           dataType: 'json',
@@ -171,7 +174,7 @@ var ocScheduler = (function() {
         if($('#series').val() === '' && $('#seriesSelect').val() !== ''){
           ocUtils.log("Searching for series in series endpoint");
           $.ajax({
-            url : SERIES_SEARCH_URL + '?seriesTitle=' + $('#seriesSelect').val(),
+            url : SERIES_SEARCH_URL,// + '?seriesTitle=' + $('#seriesSelect').val(),
             type : 'get',
             dataType : 'json',
             success : function(data) {
@@ -179,11 +182,15 @@ var ocScheduler = (function() {
               series_list = data["catalogs"],
               series_title,
               series_id;
-
-              if(series_list.length !== 0){
-                series_title = series_list[0][DUBLIN_CORE_NS_URI]["title"] ? series_list[0][DUBLIN_CORE_NS_URI]["title"][0].value : "";
-                series_id = series_list[0][DUBLIN_CORE_NS_URI]["identifier"] ? series_list[0][DUBLIN_CORE_NS_URI]["identifier"][0].value : "";
-                $('#series').val(series_id);
+              $('#series').val('');
+              for (i in series_list) {
+                var series_title, series_id;
+                series_title = series_list[i][DUBLIN_CORE_NS_URI]["title"] ? series_list[i][DUBLIN_CORE_NS_URI]["title"][0].value : "";
+                series_id = series_list[i][DUBLIN_CORE_NS_URI]["identifier"] ? series_list[i][DUBLIN_CORE_NS_URI]["identifier"][0].value : "";
+                if (series_title === series_input){
+                  $('#series').val(series_id);
+                  break;
+                }
               }
             }
           });
@@ -767,7 +774,7 @@ var ocScheduler = (function() {
             success: function(data){
               window.debug = data;
               creationSucceeded = true;
-              seriesId = $(data).find('dcterms\\:identifier').text();
+              seriesId = $(data).find('dcterms|identifier').text();
               $('#series').val(seriesId);
               seriesComponent.fields.series.val(seriesId);
             },
@@ -1052,7 +1059,7 @@ var ocScheduler = (function() {
         }
       });
 
-      dcComps.recurrence = new ocAdmin.Component(['scheduleRepeat', 'repeatSun', 'repeatMon', 'repeatTue', 'repeatWed', 'repeatThu', 'repeatFri', 'repeatSat', 'recurrenceStart'],
+      dcComps.recurrence = new ocAdmin.Component(['repeatSun', 'repeatMon', 'repeatTue', 'repeatWed', 'repeatThu', 'repeatFri', 'repeatSat', 'recurrenceStart'],
       {
         required: true,
         key: 'recurrence',
@@ -1066,7 +1073,6 @@ var ocScheduler = (function() {
         getValue: function() {
           var rrule, dotw, days, date, hour, min, dayOffset;
           if(this.validate()) {
-            if(this.fields.scheduleRepeat.val() == 'weekly') {
               rrule     = "FREQ=WEEKLY;BYDAY=";
               dotw      = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
               days      = [];
@@ -1099,7 +1105,6 @@ var ocScheduler = (function() {
                 days.push(dotw[(6 + dayOffset) % 7]);
               }
               this.value = rrule + this.getDays() + ";BYHOUR=" + hour + ";BYMINUTE=" + min;
-            }
           }
           return this.value;
         },
@@ -1111,7 +1116,6 @@ var ocScheduler = (function() {
             };
           }
           if(value.rrule.indexOf('FREQ=WEEKLY') != -1) {
-            this.fields.scheduleRepeat.val('weekly');
             var days = value.rrule.split('BYDAY=');
             if(days[1].length > 0){
               days = days[1].split(',');
@@ -1145,22 +1149,20 @@ var ocScheduler = (function() {
           }
         },
         validate: function() {
-          if(this.fields.scheduleRepeat.val() != 'norepeat') {
             if(this.fields.repeatSun[0].checked ||
-              this.fields.repeatMon[0].checked ||
-              this.fields.repeatTue[0].checked ||
-              this.fields.repeatWed[0].checked ||
-              this.fields.repeatThu[0].checked ||
-              this.fields.repeatFri[0].checked ||
-              this.fields.repeatSat[0].checked ){
-              if(ocScheduler.components.recurrenceStart.validate() &&
-                // ocScheduler.components.recurrenceDuration.validate() &&
-              ocScheduler.components.recurrenceEnd.validate()) {
-                return [];
-              }
+               this.fields.repeatMon[0].checked ||
+               this.fields.repeatTue[0].checked ||
+               this.fields.repeatWed[0].checked ||
+               this.fields.repeatThu[0].checked ||
+               this.fields.repeatFri[0].checked ||
+               this.fields.repeatSat[0].checked ){
+                if(ocScheduler.components.recurrenceStart.validate() &&
+                   // ocScheduler.components.recurrenceDuration.validate() &&
+                   ocScheduler.components.recurrenceEnd.validate()) {
+                    return [];
+                }
             }
-          }
-          return this.errors.missingRequired;
+            return this.errors.missingRequired;
         },
         toNode: function(parent) {
           for(var el in this.fields) {
@@ -1509,11 +1511,15 @@ var ocScheduler = (function() {
   }
 
   function showUserMessages(errors, type) {
+    var errorContainer         = $('.scheduler-info-container'),
+        missingFieldsContainer = $('#missingFieldsContainer');
+    
     type = type || 'error';
-    if(type === 'error' && $('#missingFieldsContainer').css('display') === 'none') {
-      $('#missingFieldsContainer').show();
+
+    if(type === 'error' && missingFieldsContainer.css('display') === 'none') {
+      missingFieldsContainer.show();
     } else {
-      $('#missingFieldsContainer li').hide();
+      missingFieldsContainer.find('li').hide();
     }
     for(var i in errors) {
       $('#' + errors[i].name).show();
@@ -1522,6 +1528,8 @@ var ocScheduler = (function() {
         $('#' + label).addClass('label-error');
       }
     }
+    $(window).scrollTop(errorContainer.offset().top)
+             .scrollLeft(errorContainer.offset().left);
   }
 
   function hideUserMessages() {

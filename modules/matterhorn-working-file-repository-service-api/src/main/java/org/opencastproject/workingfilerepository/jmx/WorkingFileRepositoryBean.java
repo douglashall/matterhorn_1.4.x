@@ -15,6 +15,7 @@
  */
 package org.opencastproject.workingfilerepository.jmx;
 
+import org.opencastproject.util.data.Option.Match;
 import org.opencastproject.workingfilerepository.api.WorkingFileRepository;
 
 public class WorkingFileRepositoryBean implements WorkingFileRepositoryMXBean {
@@ -30,7 +31,17 @@ public class WorkingFileRepositoryBean implements WorkingFileRepositoryMXBean {
    */
   @Override
   public long getFreeSpace() {
-    return workingFileRepository.getUsableSpace();
+    return workingFileRepository.getUsableSpace().fold(new Match<Long, Long>() {
+      @Override
+      public Long some(Long a) {
+        return a;
+      }
+
+      @Override
+      public Long none() {
+        return -1L;
+      }
+    });
   }
 
   /**
@@ -38,7 +49,17 @@ public class WorkingFileRepositoryBean implements WorkingFileRepositoryMXBean {
    */
   @Override
   public long getUsedSpace() {
-    return workingFileRepository.getTotalSpace() - workingFileRepository.getUsableSpace();
+    return workingFileRepository.getUsedSpace().fold(new Match<Long, Long>() {
+      @Override
+      public Long some(Long a) {
+        return a;
+      }
+
+      @Override
+      public Long none() {
+        return -1L;
+      }
+    });
   }
 
   /**
@@ -46,7 +67,17 @@ public class WorkingFileRepositoryBean implements WorkingFileRepositoryMXBean {
    */
   @Override
   public long getTotalSpace() {
-    return workingFileRepository.getTotalSpace();
+    return workingFileRepository.getTotalSpace().fold(new Match<Long, Long>() {
+      @Override
+      public Long some(Long a) {
+        return a;
+      }
+
+      @Override
+      public Long none() {
+        return -1L;
+      }
+    });
   }
 
 }

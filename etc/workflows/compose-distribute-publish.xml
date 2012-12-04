@@ -3,6 +3,11 @@
 
   <id>full</id>
   <title>Encode, Analyze, and Distribute</title>
+  <tags>
+  	<tag>upload</tag>
+	<tag>schedule</tag>
+	<tag>archive</tag>
+  </tags>
   <description>
     A simple workflow that transcodes the media into distribution formats, then sends the resulting distribution files,
     along with their associated metadata, to the distribution channels.
@@ -13,7 +18,7 @@
     <fieldset>
       <legend>Holds</legend>
       <span>Processing should be paused to allow for:</span>
-      <ul class="oc-ui-checkbox-list">
+      <ul class="oc-ui-checkbox-list-upload">
           <input id="videoPreview" name="videoPreview" type="checkbox" class="configField holdCheckbox" style="visibility:hidden" value="true"/>
         <li class="ui-helper-clearfix">
           <span id="trimholdconfig">
@@ -31,7 +36,7 @@
     </fieldset>
     <fieldset>
       <legend>Archive</legend>
-      <ul class="oc-ui-form-list">       
+      <ul class="oc-ui-checkbox-list-upload">       
           <li class="ui-helper-clearfix">
             <span id="archiveconfig">
               <input id="archiveOp" name="archiveOp" type="checkbox" class="configField holdCheckbox" value="true"/>
@@ -64,14 +69,17 @@
     </fieldset>
     <script type="text/javascript">
       var ocWorkflowPanel = ocWorkflowPanel || {};
+      var trimHold = $('input#trimHold');
+	  var captionHold = $('input#captionHold');
+      var videoPreview = $('input#videoPreview');
       
       var checkVideoPreview = function(){
-        var checkValue = trimHold.checked || captionHold.checked;
-        videoPreview.checked = checkValue;
+      	var checkValue = trimHold.is(':checked') || captionHold.is(':checked');
+      	videoPreview.attr('checked', checkValue);
       }
       
-      trimHold.addEventListener("click",checkVideoPreview,false);
-      captionHold.addEventListener("click",checkVideoPreview,false);
+      trimHold.click(checkVideoPreview);
+	  captionHold.click(checkVideoPreview);
       
       ocWorkflowPanel.registerComponents = function(components){
         /* components with keys that begin with 'org.opencastproject.workflow.config' will be passed
@@ -129,7 +137,7 @@
       id="tag"
       description="Tagging source material for archival">
       <configurations>
-        <configuration key="source-flavors">*/source</configuration>
+        <configuration key="source-flavors">*/source,dublincore/*</configuration>
         <configuration key="target-tags">+archive</configuration>
       </configurations>
     </operation>

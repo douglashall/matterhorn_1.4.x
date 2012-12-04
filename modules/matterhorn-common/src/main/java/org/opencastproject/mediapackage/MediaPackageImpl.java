@@ -196,8 +196,10 @@ public final class MediaPackageImpl implements MediaPackage {
   public Long getDuration() {
     if (duration == null && hasTracks()) {
       for (Track t : getTracks()) {
-        if (duration == null || duration < t.getDuration())
-          duration = t.getDuration();
+        if (t.getDuration() != null) {
+          if (duration == null || duration < t.getDuration())
+            duration = t.getDuration();
+        }
       }
     }
     return duration;
@@ -1084,11 +1086,11 @@ public final class MediaPackageImpl implements MediaPackage {
    * @param element
    */
   protected void removeElement(MediaPackageElement element) {
+    removeInternal(element);
+    fireElementRemoved(element);
     if (element instanceof AbstractMediaPackageElement) {
       ((AbstractMediaPackageElement) element).setMediaPackage(null);
     }
-    removeInternal(element);
-    fireElementRemoved(element);
   }
 
   /**

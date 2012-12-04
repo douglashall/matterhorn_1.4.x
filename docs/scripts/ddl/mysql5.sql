@@ -84,6 +84,12 @@ CREATE TABLE job (
 	PRIMARY KEY (id)
 );
 
+CREATE TABLE job_service_registration (
+	Job_id BIGINT(20) NOT NULL,
+	servicesRegistration_id BIGINT(20) NOT NULL,
+	PRIMARY KEY (Job_id, servicesRegistration_id)
+);
+
 CREATE TABLE matterhorn_role (
 	username VARCHAR(128) NOT NULL,
 	organization VARCHAR(128) NOT NULL,
@@ -95,6 +101,26 @@ CREATE TABLE matterhorn_user (
 	organization VARCHAR(128) NOT NULL,
 	password TEXT(65535),
 	PRIMARY KEY (username, organization)
+);
+
+CREATE TABLE org_properties (
+    org_id VARCHAR(128) NOT NULL,
+    value VARCHAR(255) DEFAULT NULL,
+    name VARCHAR(255) DEFAULT NULL
+);
+
+CREATE TABLE org_servers (
+    org_id varchar(128) NOT NULL,
+    port int(11) DEFAULT NULL,
+    name varchar(255) DEFAULT NULL
+);
+
+CREATE TABLE organization (
+    org_id VARCHAR(128) NOT NULL,
+    anonymous_role VARCHAR(255) DEFAULT NULL,
+    name VARCHAR(255) DEFAULT NULL,
+    admin_role VARCHAR(255) DEFAULT NULL,
+    PRIMARY KEY (org_id)
 );
 
 CREATE TABLE scheduled_event (
@@ -234,6 +260,16 @@ ALTER TABLE job_arguments ADD CONSTRAINT UNQ_job_arguments_0 UNIQUE (
 ALTER TABLE job_context ADD CONSTRAINT UNQ_job_context_0 UNIQUE (
 	root_job,
 	key_entry
+);
+
+ALTER TABLE job_service_registration ADD CONSTRAINT FK_job_service_registration_Job_id FOREIGN KEY (
+	Job_id) REFERENCES job (
+	id
+);
+
+ALTER TABLE job_service_registration ADD CONSTRAINT job_service_registration_servicesRegistration_id FOREIGN KEY (
+	servicesRegistration_id) REFERENCES service_registration (
+	id
 );
 
 ALTER TABLE service_registration ADD CONSTRAINT FK_service_registration_host_registration FOREIGN KEY (

@@ -94,8 +94,8 @@ ocUpload.init = function() {
               ocUpload.metadata[$(this).attr('name')].push($(this).val());
             }
           } else {
-            if ($(this).attr('id') === 'ispartof') {
-              /*if($('#series').val() !== '' && $('#ispartof').val() === ''){ //have text and no id
+            if ($(this).attr('id') === 'isPartOf') {
+              /*if($('#series').val() !== '' && $('#isPartOf').val() === ''){ //have text and no id
                 ocUpload.createSeriesFromSearchText();
               }*/
             }
@@ -140,10 +140,10 @@ ocUpload.init = function() {
   $('#series').autocomplete({
     source: '/series/search',
     select: function(event, ui){
-      $('#ispartof').val(ui.item.id);
+      $('#isPartOf').val(ui.item.id);
     },
     search: function(){
-      $('#ispartof').val('');
+      $('#isPartOf').val('');
     }
   });
 
@@ -161,7 +161,7 @@ ocUpload.init = function() {
     }
   });
   
-  ocWorkflow.init($('#workflowSelector'), $('#workflowConfigContainer'));
+  ocWorkflow.init($('#workflowSelector'), $('#workflowConfigContainer'), ['upload']);
 
   // test if we upload a new recording or want to retry a workflow
   ocUpload.retryId = ocUtils.getURLParam("retry");
@@ -401,7 +401,7 @@ ocUpload.createSeriesFromSearchText = function(){
     dataType : 'json',
     success: function(data){
       creationSucceeded = true;
-      $('#ispartof').val(data.series.id);
+      $('#isPartOf').val(data.series.id);
     }
   });
   return creationSucceeded;

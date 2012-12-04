@@ -135,11 +135,11 @@
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-bundle-jaxrs</artifactId>
     </dependency>
-    
-    <dependency>
-      <groupId>org.apache.geronimo.javamail</groupId>
-      <artifactId>geronimo-javamail_1.4_provider</artifactId>
-      <version>1.8.3</version>
+	
+	<dependency>
+      <groupId>org.sakaiproject.nakamura</groupId>
+      <artifactId>javax.activation-mail</artifactId>
+      <version>1.1.1.1.4.2-1.4.2</version>
 	</dependency>
 
     <!-- Logging -->
@@ -194,12 +194,11 @@
               spring-security-oauth;inline=true,
               jboss-xacml;inline=true,
               json-simple;inline=true,
-              geronimo-javamail_1.4_provider;inline=true
+              javax.activation-mail;inline=true
             </Embed-Dependency>
             <Private-Package>
               org.jboss.security.xacml.core,
               org.jboss.security.xacml.core.model.policy,
-              org.apache.geronimo.javamail,
             </Private-Package>
             <Import-Package>
               javax.activation,
@@ -298,6 +297,7 @@
               org.opencastproject.kernel.pingback;version=${project.version},
               org.opencastproject.kernel.rest;version=${project.version},
               org.opencastproject.kernel.security;version=${project.version},
+              org.opencastproject.kernel.security.persistence;version=${project.version},
               org.opencastproject.kernel.userdirectory;version=${project.version},
               org.springframework.security.oauth;version=1.0.0.M1,
               org.springframework.security.oauth.common;version=1.0.0.M1,
@@ -314,14 +314,19 @@
               OSGI-INF/jsonp.xml,
               OSGI-INF/organization-directory-service.xml,
               OSGI-INF/organization-filter.xml,
+              OSGI-INF/organization-persistence.xml,
               OSGI-INF/current-job-filter.xml,
               OSGI-INF/pingback.xml,
               OSGI-INF/rest.xml,
               OSGI-INF/security-service.xml,
               OSGI-INF/smtp-service.xml,
               OSGI-INF/user-and-role-directory-service.xml,
+              OSGI-INF/remote-user-and-role-filter.xml,
               OSGI-INF/security-config-scanner.xml
             </Service-Component>
+            <JPA-PersistenceUnits>
+              org.opencastproject.kernel
+            </JPA-PersistenceUnits>
           </instructions>
         </configuration>
       </plugin>

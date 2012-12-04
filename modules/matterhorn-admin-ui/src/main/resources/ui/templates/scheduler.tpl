@@ -1,4 +1,21 @@
 <div id="content">
+
+  <!-- CONTENT AREA -->
+  <div class="layout-page-content">
+    <div class="form-box layout-centered scheduler-selection-container">
+      <h2><span id="i18n_page_title">Schedule Recording</span></h2>
+      <ul id="recordingType" class="layout-centered">
+        <li>
+          <input type="radio" id="singleRecording" name="recordingType" checked="checked" />
+          <label for="singleRecording" class="lbl_radio"> Single Recording</label>
+        </li>
+        <li>
+          <input type="radio" id="multipleRecordings" name="recordingType" />
+          <label for="multipleRecordings" class="lbl_radio"> Group of Recordings</label>
+        </li>
+      </ul>
+    </div>
+    
   <div class="form-box layout-centered layout-page-header ui-helper-hidden" id="missingFieldsContainer">
     <div class="ui-state-error ui-corner-all scheduler-info-container">
       <h3 style="position: relative; padding-left: 20px;">
@@ -41,22 +58,6 @@
     </div>
   </div>
 
-  <!-- CONTENT AREA -->
-  <div class="layout-page-content">
-    <div class="form-box layout-centered scheduler-selection-container">
-      <h2><span id="i18n_page_title">Schedule Recording</span></h2>
-      <ul id="recordingType" class="layout-centered">
-        <li>
-          <input type="radio" id="singleRecording" name="recordingType" checked="checked" />
-          <label for="singleRecording" class="lbl_radio"> Single Recording</label>
-        </li>
-        <li>
-          <input type="radio" id="multipleRecordings" name="recordingType" />
-          <label for="multipleRecordings" class="lbl_radio"> Group of Recordings</label>
-        </li>
-      </ul>
-    </div>
-
     <!-- Common Scheduling Information -->
     <div class="form-box layout-centered ui-widget">
       <div class="form-box-content ui-widget-content ui-corner-all">
@@ -67,7 +68,7 @@
               <input type="text" id="title" name="title" class="oc-ui-form-field" maxlength="255" />
             </li>
             <li id="titleNote" class="ui-helper-hidden">
-              <label class="scheduler-label">&nbsp;</label>
+              <label class="scheduler-label">&#160;</label>
               <span class="scheduler-instruction-text">
                 Titles of individual recordings will be appended by sequential numbers starting with 1
               </span>
@@ -317,15 +318,8 @@
             -->
             <fieldset>
               <ul class="oc-ui-form-list">
-                <li>
-                  <label for="scheduleRepeat" class="scheduler-label form-box-label"><span id="i18n_sched_repeats">Repeats</span>:</label>
-                  <select id="scheduleRepeat" disabled="true">
-                    <option value="norepeat" id="i18n_sched_no_repeat">Don't Repeat</option>
-                    <option value="weekly" selected="selected" id="i18n_sched_weekly">Weekly</option>
-                  </select>
-                </li>
                 <li id="daySelect">
-                  <label class="scheduler-label" for="repeatDays"><span class="scheduler-required-text">* </span><span id="i18n_sched_days">Days</span>:</label>
+                  <label class="scheduler-label" for="repeatDays"><span class="scheduler-required-text">* </span><span id="i18n_sched_days">Repeat Weekly on</span>:</label>
                   <table id="agentsTable2" class="layout-inline scheduler-day-table">
                     <thead>
                       <tr>
@@ -525,7 +519,7 @@
         <form action="">
           <ul class="oc-ui-form-list">
             <li>
-              <label class="scheduler-label">&nbsp;</label>
+              <label class="scheduler-label">&#160;</label>
               <input type="button" value="Schedule" id="submitButton" class="mouseover-pointer control-button" />
               <a id="cancelButton" title="Cancel" class="secondaryButton">Cancel</a>
               <input type="hidden" id="eventId" />
@@ -534,7 +528,7 @@
               <input type="hidden" id="agentTimeZone" />
             </li>
             <li>
-              <label class="scheduler-label">&nbsp;</label>
+              <label class="scheduler-label">&#160;</label>
               <span class="scheduler-required-text">*</span><span id="i18n_required">Required</span>
             </li>
           </ul>

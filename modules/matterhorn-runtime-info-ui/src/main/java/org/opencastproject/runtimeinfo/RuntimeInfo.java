@@ -21,6 +21,7 @@ import org.opencastproject.rest.RestConstants;
 import org.opencastproject.security.api.Organization;
 import org.opencastproject.security.api.SecurityService;
 import org.opencastproject.security.api.User;
+import org.opencastproject.util.UrlSupport;
 import org.opencastproject.util.doc.rest.RestQuery;
 import org.opencastproject.util.doc.rest.RestResponse;
 import org.opencastproject.util.doc.rest.RestService;
@@ -161,20 +162,46 @@ public class RuntimeInfo {
   @RestQuery(name = "services", description = "List the REST services and user interfaces running on this host", reponses = { @RestResponse(description = "The components running on this host", responseCode = HttpServletResponse.SC_OK) }, returnDescription = "")
   @SuppressWarnings("unchecked")
   public String getRuntimeInfo(@Context HttpServletRequest request) throws MalformedURLException {
+    Organization organization = securityService.getOrganization();
 
     // Get request protocol and port
     String targetScheme = request.getScheme();
 
-    // Create the target URL
-    URL targetEngageBaseUrl = new URL(targetScheme, engageBaseUrl.getHost(), engageBaseUrl.getPort(),
-            engageBaseUrl.getFile());
-    URL targetAdminBaseUrl = new URL(targetScheme, adminBaseUrl.getHost(), adminBaseUrl.getPort(),
-            adminBaseUrl.getFile());
+    // Create the engage target URL
+    URL targetEngageBaseUrl = null;
+    String organizationEngageURL = organization.getProperties().get(ENGAGE_URL_PROPERTY);
+    if (StringUtils.isNotBlank(organizationEngageURL)) {
+      try {
+        targetEngageBaseUrl = new URL(organizationEngageURL);
+      } catch (MalformedURLException e) {
+        logger.warn("Engage url '{}' of organization '{}' is malformed", organizationEngageURL, organization.getId());
+        targetEngageBaseUrl = new URL(targetScheme, engageBaseUrl.getHost(), engageBaseUrl.getPort(),
+                engageBaseUrl.getFile());
+      }
+    } else {
+      targetEngageBaseUrl = new URL(targetScheme, engageBaseUrl.getHost(), engageBaseUrl.getPort(),
+              engageBaseUrl.getFile());
+    }
+
+    // Create the admin target URL
+    URL targetAdminBaseUrl = null;
+    String organizationAdminURL = organization.getProperties().get(ADMIN_URL_PROPERTY);
+    if (StringUtils.isNotBlank(organizationAdminURL)) {
+      try {
+        targetAdminBaseUrl = new URL(organizationAdminURL);
+      } catch (MalformedURLException e) {
+        logger.warn("Admin url '{}' of organization '{}' is malformed", organizationAdminURL, organization.getId());
+        targetAdminBaseUrl = new URL(targetScheme, adminBaseUrl.getHost(), adminBaseUrl.getPort(),
+                adminBaseUrl.getFile());
+      }
+    } else {
+      targetAdminBaseUrl = new URL(targetScheme, adminBaseUrl.getHost(), adminBaseUrl.getPort(), adminBaseUrl.getFile());
+    }
 
     JSONObject json = new JSONObject();
     json.put("engage", targetEngageBaseUrl.toString());
     json.put("admin", targetAdminBaseUrl.toString());
-    json.put("rest", getRestEndpointsAsJson());
+    json.put("rest", getRestEndpointsAsJson(request));
     json.put("ui", getUserInterfacesAsJson());
 
     return json.toJSONString();
@@ -219,7 +246,7 @@ public class RuntimeInfo {
   }
 
   @SuppressWarnings("unchecked")
-  protected JSONArray getRestEndpointsAsJson() {
+  protected JSONArray getRestEndpointsAsJson(HttpServletRequest request) throws MalformedURLException {
     JSONArray json = new JSONArray();
     ServiceReference[] serviceRefs = null;
     try {
@@ -238,10 +265,10 @@ public class RuntimeInfo {
       endpoint.put("description", description);
       endpoint.put("version", version);
       endpoint.put("type", type);
+      URL url = new URL(request.getScheme(), request.getServerName(), request.getServerPort(), servletContextPath);
       endpoint.put("path", servletContextPath);
-      endpoint.put("docs", serverUrl + servletContextPath + "/docs"); // This is a Matterhorn convention
-      endpoint.put("wadl", serverUrl + servletContextPath + "/?_wadl&_type=xml"); // This triggers a CXF-specific
-                                                                                  // handler
+      endpoint.put("docs", UrlSupport.concat(url.toExternalForm(), "/docs")); // This is a Matterhorn convention
+      endpoint.put("wadl", UrlSupport.concat(url.toExternalForm(), "/?_wadl&_type=xml")); // This triggers a
       json.add(endpoint);
     }
     return json;

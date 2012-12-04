@@ -18,7 +18,7 @@ echo "Using ubuntu mirror at: $UBUNTU_MIRROR"
 
 USERNAME="opencast"
 PASSWORD="matterhorn"
-RELEASE="lucid"
+RELEASE="oneiric"
 
 export M2=`pwd`/m2/
 export JAVA_HOME=`mvn --version | grep "Java home" | awk '{print $3}'`
@@ -66,7 +66,7 @@ echo "=========================="
 
 if [ ! -e vmbackup ]; then
   #build the ubuntu vm
-  sudo ubuntu-vm-builder vmw6 $RELEASE --arch 'i386' --mem '512' --cpus 1 \
+  sudo ubuntu-vm-builder vmw6 $RELEASE --arch 'i386' --mem '1024' --cpus 1 \
   --rootsize '12288' --swapsize '1024' --kernel-flavour='virtual' \
   --hostname 'opencast' --mirror $UBUNTU_MIRROR \
   --components 'main,universe,multiverse' \

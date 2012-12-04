@@ -55,12 +55,6 @@ opencast.episode = (function() {
     return $.getJSON("../episode/episode.json", params);
   }
 
-  /** @return jqXHR containing raw json
-   */
-  function getAvailableWorkflowDefinitions() {
-    return $.getJSON("../workflow/definitions.json");
-  }
-
   /** Open the metadata editor with mediapackage xml.
    *  @param mediapackageXml -- xml representation of the mediapackage
    */
@@ -211,12 +205,20 @@ opencast.episode = (function() {
    *  @return $win
    */
   function openWindow($win, opt) {
-    $win.dialog("option", _.extend({
+    var options =  _.extend({
       width: $(window).width() - 40,
+      width: '80%',
       height: $(window).height() - 40,
       position: ["center", "center"],
       show: "scale"
-    }, opt || {})).dialog("open");
+    }, opt || {});
+
+    $win.dialog("option",options).dialog("open");
+
+    $(window).bind('resize',function(){
+      $win.dialog("option",options);
+    });
+
     return $win;
   }
 
@@ -455,7 +457,7 @@ opencast.episode = (function() {
             var $window = $("#awf-window").dialog({autoOpen: false});
             var $selectWorkflow = $("#awf-select");
             var $configContainer = $("#awf-config-container");
-            ocWorkflow.init($selectWorkflow, $configContainer);
+            ocWorkflow.init($selectWorkflow, $configContainer, ['archive']);
             $("#awf-start").click(function () {
               openWindow($window, {height: 250});
             });
@@ -493,7 +495,7 @@ opencast.episode = (function() {
                 function (a) {
                   return selectedEpisodes[a]
                 }).value().length;
-        $("#selectedEpisodesCount").html(c + " episode(s) selected");
+        $("#selectedEpisodesCount").html(c + " archives(s) selected");
       }
 
       /** Create a state object from the current URL.

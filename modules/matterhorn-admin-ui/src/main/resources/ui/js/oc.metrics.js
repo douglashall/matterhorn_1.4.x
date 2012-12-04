@@ -33,13 +33,14 @@ ocMetrics = new (function() {
   
   this.JmxChartsFactory = function(keepHistorySec, pollInterval, columnsCount) {
 	    var jolokia = new Jolokia("/jolokia");
+	    var charts = [];
 	    var series = [];
 	    var monitoredMbeans = [];
 	 
 	    columnsCount = columnsCount || 1;
 	    pollInterval = pollInterval || 5000;
 	    var keepPoints = (keepHistorySec || 600) / (pollInterval / 1000);
-	 
+	    
 	    setupPortletsContainer();
 	 
 	    setInterval(function() {
@@ -48,26 +49,38 @@ ocMetrics = new (function() {
 	 
 	    this.create = function(options, mbeans) {
 	        mbeans = $.makeArray(mbeans);
-	        series = series.concat(createChart(options, mbeans).series);
+	        var chart = createChart(options, mbeans);
+	        charts.push(chart);
+	        series = series.concat(chart.series);
 	        monitoredMbeans = monitoredMbeans.concat(mbeans);
 	    };
 	    
 	    this.createStack = function(options, mbeans) {
 	    	mbeans = $.makeArray(mbeans);
-	    	series = series.concat(createStackChart(options, mbeans).series);
+	    	var chart = createStackChart(options, mbeans);
+	        charts.push(chart);
+	    	series = series.concat(chart.series);
 	    	monitoredMbeans = monitoredMbeans.concat(mbeans);
 	    };
 	    
 	    this.createPlotLine = function(options, mbeans) {
 	    	mbeans = $.makeArray(mbeans);
-	    	series = series.concat(createPlotLineChart(options, mbeans).series);
+	    	var chart = createPlotLineChart(options, mbeans);
+	        charts.push(chart);
+	    	series = series.concat(chart.series);
 	    	monitoredMbeans = monitoredMbeans.concat(mbeans);
 	    };
 	    
 	    this.createPercentageArea = function(options, mbeans) {
 	    	mbeans = $.makeArray(mbeans);
-	    	series = series.concat(createPercentageAreaChart(options, mbeans).series);
+	    	var chart = createPercentageAreaChart(options, mbeans);
+	        charts.push(chart);
+	    	series = series.concat(chart.series);
 	    	monitoredMbeans = monitoredMbeans.concat(mbeans);
+	    };
+	    
+	    this.getCharts = function() {
+	    	return charts;
 	    };
 	    
 	    function pollAndUpdateCharts() {
@@ -359,7 +372,8 @@ ocMetrics = new (function() {
   this.render = function() {
       $('div.jmx-tableContainer').jqotesubtpl('templates/metrics.tpl', {});
       
-  		var factory = self.JmxChartsFactory(undefined, parseInt(ocMetrics.Configuration.refresh), undefined);
+  		self.factory = self.JmxChartsFactory(undefined, parseInt(ocMetrics.Configuration.refresh), undefined);
+  		var factory = self.factory;
   		factory.createPlotLine({
   			title: "Heap Memory Usage",
   			type: "MBytes",
@@ -498,7 +512,7 @@ ocMetrics = new (function() {
 	        	attribute: 'Failed'
 	        }
         ]);
-  	    factory.createPercentageArea({
+  	    factory.create({
 	  			title: "Workspace Storage",
 	  			type: "GBytes",
 	  	  		typeShort: " GB",
@@ -511,11 +525,16 @@ ocMetrics = new (function() {
   	      	},
   	      	{
   	      		container: 'matterhorn',
+  	      		name: 'org.opencastproject.matterhorn:type=Workspace',
+  	      		attribute: 'FreeSpace'
+  	      	},
+  	      	{
+  	      		container: 'matterhorn',
   	      	    name: 'org.opencastproject.matterhorn:type=Workspace',
   	      	    attribute: 'UsedSpace'
   	      	}
   	    ]);
-  	    factory.createPercentageArea({
+  	    factory.create({
 	  			title: "Working File Repository Storage",
 	  			type: "GBytes",
 	  			typeShort: " GB",
@@ -526,12 +545,39 @@ ocMetrics = new (function() {
             	name: 'org.opencastproject.matterhorn:type=WorkingFileRepository',
             	attribute: 'TotalSpace'
             },
+  	      	{
+  	      		container: 'matterhorn',
+  	      		name: 'org.opencastproject.matterhorn:type=WorkingFileRepository',
+  	      		attribute: 'FreeSpace'
+  	      	},
             {
             	container: 'matterhorn',
             	name: 'org.opencastproject.matterhorn:type=WorkingFileRepository',
             	attribute: 'UsedSpace'
             }
         ]);
+  	    factory.create({
+	  	    	title: "Archive Storage",
+	  	    	type: "GBytes",
+	  	    	typeShort: " GB",
+	  	    	dividing: 1073741824,
+	  	    	decimals: 4
+	  	    },[{
+	  	    	container: 'matterhorn',
+	  	    	name: 'org.opencastproject.matterhorn:type=ElementStore',
+	  	    	attribute: 'TotalSpace'
+	  	    },
+  	      	{
+  	      		container: 'matterhorn',
+  	      		name: 'org.opencastproject.matterhorn:type=ElementStore',
+  	      		attribute: 'FreeSpace'
+  	      	},
+	  	    {
+	  	    	container: 'matterhorn',
+	  	    	name: 'org.opencastproject.matterhorn:type=ElementStore',
+	  	    	attribute: 'UsedSpace'
+	  	    }
+  	    ]);
   	    factory.createPlotLine({
 	  			title: "Ingests",
 	  			type: "Number of"
@@ -584,6 +630,11 @@ ocMetrics = new (function() {
 		  ocMetrics.Configuration.state = $(this).val();
 		  $('div.jmx-tableContainer').hide();
 		  $('div#' + ocMetrics.Configuration.state + '-tableContainer').show();
+		  
+		  // Fix width of charts
+		  $(self.factory.getCharts()).each(function(){
+			  this.resize($(this.container).parent().width(), this.containerHeight);
+		  });
 	  });
 	  
 	  self.render();

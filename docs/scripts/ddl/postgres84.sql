@@ -77,7 +77,7 @@ CREATE INDEX "IX_host_registration_UNQ_host_registration_0" on "host_registratio
 --
 CREATE TABLE "job" (
   "id" bigint NOT NULL,
-  "status" bigint DEFAULT NULL,
+  "status" integer DEFAULT NULL,
   "payload" text,
   "date_started" timestamp DEFAULT NULL,
   "run_time" bigint DEFAULT NULL,
@@ -122,6 +122,15 @@ CREATE TABLE "job_context" (
 );
 
 --
+-- Table: job_service_registration
+--
+CREATE TABLE "job_service_registration" (
+	"Job_id" bigint NOT NULL,
+	"servicesRegistration_id" bigint NOT NULL,
+	PRIMARY KEY ("Job_id", "servicesRegistration_id")
+);
+
+--
 -- Table: matterhorn_role
 --
 CREATE TABLE "matterhorn_role" (
@@ -138,6 +147,35 @@ CREATE TABLE "matterhorn_user" (
   "organization" character varying(128) NOT NULL,
   "password" text,
   PRIMARY KEY ("username", "organization")
+);
+
+--
+-- Table: org_servers
+--
+CREATE TABLE "org_servers" (
+    "org_id" character varying(128) NOT NULL,
+    "port" integer(11) DEFAULT NULL,
+    "name" character varying(255) DEFAULT NULL
+);
+
+--
+-- Table: org_properties
+--
+CREATE TABLE "org_properties" (
+  "org_id" character varying(128) NOT NULL,
+  "value" character varying(255) DEFAULT NULL,
+  "name" character varying(255) DEFAULT NULL
+);
+
+--
+-- Table: organization
+--
+CREATE TABLE "organization" (
+  "org_id" character varying(128) NOT NULL,
+  "anonymous_role" character varying(255) DEFAULT NULL,
+  "name" character varying(255) DEFAULT NULL,
+  "admin_role" character varying(255) DEFAULT NULL,
+  PRIMARY KEY ("org_id")
 );
 
 --
@@ -184,7 +222,7 @@ CREATE TABLE "service_registration" (
   "service_type" character varying(255) NOT NULL,
   "online" boolean NOT NULL,
   "online_from" timestamp,
-  "service_state" character varying(32) NOT NULL,
+  "service_state" integer NOT NULL,
   "state_changed" timestamp,
   "warning_state_trigger" bigint,
   "error_state_trigger" bigint,
@@ -246,11 +284,9 @@ CREATE TABLE "episode_asset" (
 CREATE TABLE "episode_episode" (
   "mediapackage_id" character varying(255) NOT NULL,
   "version" bigint NOT NULL,
-  "latest_version" boolean NOT NULL,
   "organization_id" character varying(255) DEFAULT NULL,
   "deletion_date" timestamp DEFAULT NULL,
   "access_control" text,
-  "locked" boolean NOT NULL,
   "mediapackage" text,
   "modification_date" timestamp DEFAULT NULL,
   PRIMARY KEY ("mediapackage_id", "version")

@@ -61,7 +61,7 @@
           <a href="#recordings" title="Recordings" id="i18n_tab_recording">Recordings</a>
         </li>
         <li>
-          <a href="#episode" title="Episodes" id="i18n_tab_episode">Episodes</a>
+          <a href="#archives" title="Archives" id="i18n_tab_episode">Archives</a>
         </li>
         <li>
           <a href="#series_list" title="Series" id="i18n_tab_series">Series</a>
@@ -82,6 +82,9 @@
     </script>
 
     <script type="text/javascript">
+      $.ajaxSetup({
+        cache: false
+      });
       var defaultPath = "/recordings", // the path to use when the base page directory is requested
           meJsonUrl = "/info/me.json", // path to the RuntimeInfo REST endpoint
           linkSelector = "#tabsWrapper ul:first a",
@@ -155,9 +158,9 @@
               },
               tab: "i18n_tab_recording"
             },
-            "/episode": {
+            "/archives": {
               init: function() {
-                document.title = "Episode" + matterhorn;
+                document.title = "Archive" + matterhorn;
                 opencast.episode.Archive.init();
               },
               tab: "i18n_tab_episode"

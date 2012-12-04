@@ -47,7 +47,6 @@
         <module>modules/matterhorn-episode-service-api</module>
         <module>modules/matterhorn-episode-service-impl</module>
         <module>modules/matterhorn-episode-service-filesystem</module>
-        <module>modules/matterhorn-export-distribution-ui</module>
         <module>modules/matterhorn-gstreamer-service-api</module>
         <module>modules/matterhorn-ingest-service-api</module>
         <module>modules/matterhorn-ingest-service-impl</module>
@@ -96,14 +95,30 @@
         <module>modules/matterhorn-search-service-api</module>
         <module>modules/matterhorn-series-service-api</module>
         <module>modules/matterhorn-static</module>
-        <module>modules/matterhorn-usertracking-service-api</module>
-        <module>modules/matterhorn-usertracking-service-impl</module>
+        <module>modules/matterhorn-usertracking-api</module>
+        <module>modules/matterhorn-usertracking-impl</module>
         <module>modules/matterhorn-workspace-api</module>
       </modules>
     </profile>
 
     <profile>
-      <id>gstreamer-launch-service</id>
+      <id>export-admin</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <modules>
+        <module>modules/matterhorn-common</module>
+        <module>modules/matterhorn-export-impl</module>
+        <module>modules/matterhorn-gstreamer-service-api</module>
+        <module>modules/matterhorn-gstreamer-service-remote</module>
+        <module>modules/matterhorn-json</module>
+        <module>modules/matterhorn-serviceregistry</module>
+        <module>modules/matterhorn-static</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>export-worker</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
@@ -113,15 +128,16 @@
       </modules>
     </profile>
 
-    <profile>
-      <id>export</id>
+     <profile>
+      <id>export-all-in-one</id>
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
       <modules>
         <module>modules/matterhorn-common</module>
+        <module>modules/matterhorn-export-impl</module>
         <module>modules/matterhorn-gstreamer-service-api</module>
-        <module>modules/matterhorn-gstreamer-service-remote</module>
+        <module>modules/matterhorn-gstreamer-service-impl</module>
         <module>modules/matterhorn-json</module>
         <module>modules/matterhorn-serviceregistry</module>
         <module>modules/matterhorn-static</module>
@@ -171,7 +187,6 @@
         <module>modules/matterhorn-distribution-service-streaming</module>
         <module>modules/matterhorn-distribution-service-youtube</module>
         <module>modules/matterhorn-dublincore</module>
-        <module>modules/matterhorn-export-distribution-ui</module>
         <module>modules/matterhorn-json</module>
         <module>modules/matterhorn-kernel</module>
         <module>modules/matterhorn-metadata-api</module>
@@ -237,8 +252,8 @@
         <module>modules/matterhorn-search-service-feeds</module>
         <module>modules/matterhorn-search-service-impl</module>
         <module>modules/matterhorn-solr</module>
-        <module>modules/matterhorn-usertracking-service-api</module>
-        <module>modules/matterhorn-usertracking-service-impl</module>
+        <module>modules/matterhorn-usertracking-api</module>
+        <module>modules/matterhorn-usertracking-impl</module>
         <module>modules/matterhorn-webconsole</module>
         <module>modules/matterhorn-workspace-api</module>
       </modules>
@@ -270,8 +285,8 @@
         <module>modules/matterhorn-search-service-feeds</module>
         <module>modules/matterhorn-search-service-impl</module>
         <module>modules/matterhorn-solr</module>
-        <module>modules/matterhorn-usertracking-service-api</module>
-        <module>modules/matterhorn-usertracking-service-impl</module>
+        <module>modules/matterhorn-usertracking-api</module>
+        <module>modules/matterhorn-usertracking-impl</module>
         <module>modules/matterhorn-webconsole</module>
         <module>modules/matterhorn-workspace-api</module>
       </modules>
@@ -1075,61 +1090,61 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.aop</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.asm</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.core</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.beans</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.jdbc</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.expression</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.transaction</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.context</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.context.support</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>org.springframework.web</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
@@ -1153,25 +1168,25 @@
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>org.springframework.security.core</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>org.springframework.security.config</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>org.springframework.security.web</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>org.springframework.security.openid</artifactId>
-        <version>3.0.2.RELEASE</version>
+        <version>3.1.0.RELEASE</version>
       </dependency>
 
       <dependency>
@@ -1856,6 +1871,17 @@
         <enabled>false</enabled>
       </releases>
     </repository>
+    <repository>
+      <id>sakai</id>
+      <name>Sakai Repo</name>
+      <url>http://source.sakaiproject.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>    
     <repository>
       <id>eclipselink</id>
       <name>Eclipselink Repo</name>
