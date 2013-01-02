@@ -68,6 +68,7 @@ import java.util.TreeMap;
 public class CountWorkflowsTest {
 
   private WorkflowServiceImpl service = null;
+  private WorkflowDefinitionScanner scanner = null;
   private WorkflowDefinition def = null;
   private WorkflowServiceSolrIndex dao = null;
   private MediaPackage mp = null;
@@ -113,6 +114,9 @@ public class CountWorkflowsTest {
       }
     };
 
+    scanner = new WorkflowDefinitionScanner();
+    service.addWorkflowDefinitionScanner(scanner);
+
     // security service
     securityService = EasyMock.createNiceMock(SecurityService.class);
     EasyMock.expect(securityService.getUser()).andReturn(SecurityServiceStub.DEFAULT_ORG_ADMIN).anyTimes();
@@ -153,6 +157,7 @@ public class CountWorkflowsTest {
     dao.solrRoot = sRoot + File.separator + "solr";
     dao.setAuthorizationService(authzService);
     dao.setSecurityService(securityService);
+    dao.setOrgDirectory(organizationDirectoryService);
     dao.activate();
     service.setDao(dao);
     service.activate(null);

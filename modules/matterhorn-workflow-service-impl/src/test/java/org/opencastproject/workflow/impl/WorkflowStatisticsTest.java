@@ -78,6 +78,7 @@ public class WorkflowStatisticsTest {
   private static final int OPERATION_COUNT = 3;
 
   private WorkflowServiceImpl service = null;
+  private WorkflowDefinitionScanner scanner = null;
   private List<WorkflowDefinition> workflowDefinitions = null;
   protected Set<HandlerRegistration> workflowHandlers = null;
   private WorkflowServiceSolrIndex dao = null;
@@ -127,6 +128,9 @@ public class WorkflowStatisticsTest {
         return workflowHandlers;
       }
     };
+
+    scanner = new WorkflowDefinitionScanner();
+    service.addWorkflowDefinitionScanner(scanner);
 
     // security service
     securityService = EasyMock.createNiceMock(SecurityService.class);
@@ -180,6 +184,7 @@ public class WorkflowStatisticsTest {
     dao.setSecurityService(securityService);
     dao.setServiceRegistry(serviceRegistry);
     dao.setAuthorizationService(authzService);
+    dao.setOrgDirectory(organizationDirectoryService);
     dao.activate();
     service.setDao(dao);
     service.activate(null);

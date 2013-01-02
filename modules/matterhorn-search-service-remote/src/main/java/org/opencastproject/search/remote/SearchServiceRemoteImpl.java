@@ -18,6 +18,7 @@ package org.opencastproject.search.remote;
 import org.opencastproject.job.api.Job;
 import org.opencastproject.job.api.JobParser;
 import org.opencastproject.mediapackage.MediaPackage;
+import org.opencastproject.mediapackage.MediaPackageElementFlavor;
 import org.opencastproject.mediapackage.MediaPackageParser;
 import org.opencastproject.search.api.SearchException;
 import org.opencastproject.search.api.SearchQuery;
@@ -28,7 +29,6 @@ import org.opencastproject.security.api.UnauthorizedException;
 import org.opencastproject.serviceregistry.api.RemoteBase;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -63,26 +63,25 @@ public class SearchServiceRemoteImpl extends RemoteBase implements SearchService
     try {
       List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>();
       params.add(new BasicNameValuePair("mediapackage", MediaPackageParser.getAsXml(mediaPackage)));
-      UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params);
-      post.setEntity(entity);
+      post.setEntity(new UrlEncodedFormEntity(params));
     } catch (Exception e) {
       throw new SearchException("Unable to assemble a remote search request for mediapackage " + mediaPackage, e);
     }
 
-    HttpResponse response = null;
+    HttpResponse response = getResponse(post);
     try {
-      response = getResponse(post, HttpStatus.SC_OK);
       if (response != null) {
         Job job = JobParser.parseJob(response.getEntity().getContent());
         logger.info("Publishing mediapackage '{}' using a remote search service", mediaPackage.getIdentifier());
         return job;
       }
     } catch (Exception e) {
-      throw new SearchException("Unable to publish " + mediaPackage.getIdentifier() + " using a remote search service", e);
+      throw new SearchException("Unable to publish " + mediaPackage.getIdentifier() + " using a remote search service",
+              e);
     } finally {
       closeConnection(response);
     }
-    
+
     throw new SearchException("Unable to publish " + mediaPackage.getIdentifier() + " using a remote search service");
   }
 
@@ -94,12 +93,11 @@ public class SearchServiceRemoteImpl extends RemoteBase implements SearchService
   @Override
   public Job delete(String mediaPackageId) throws SearchException {
     HttpDelete del = new HttpDelete(mediaPackageId);
-    HttpResponse response = null;
+    HttpResponse response = getResponse(del);
     try {
-      response = getResponse(del, HttpStatus.SC_OK);
       if (response != null) {
         Job job = JobParser.parseJob(response.getEntity().getContent());
-        logger.info("Remvoing mediapackage '{}' from a remote search service", mediaPackageId);
+        logger.info("Removing mediapackage '{}' from a remote search service", mediaPackageId);
         return job;
       }
     } catch (Exception e) {
@@ -107,7 +105,7 @@ public class SearchServiceRemoteImpl extends RemoteBase implements SearchService
     } finally {
       closeConnection(response);
     }
-    
+
     throw new SearchException("Unable to remove " + mediaPackageId + " from a remote search service");
   }
 
@@ -119,14 +117,59 @@ public class SearchServiceRemoteImpl extends RemoteBase implements SearchService
   @Override
   public SearchResult getByQuery(SearchQuery q) throws SearchException {
     HttpGet get = new HttpGet(getSearchUrl(q, false));
-    HttpResponse response = null;
+    HttpResponse response = getResponse(get);
     try {
-      response = getResponse(get);
-      if (response != null) {
+      if (response != null)
         return SearchResultImpl.valueOf(response.getEntity().getContent());
-      }
     } catch (Exception e) {
       throw new SearchException("Unable to parse results of a getByQuery request from remote search index: ", e);
+    } finally {
+      closeConnection(response);
+    }
+    throw new SearchException("Unable to perform getByQuery from remote search index");
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see org.opencastproject.search.api.SearchService#getForAdministrativeRead(org.opencastproject.search.api.SearchQuery)
+   */
+  @Override
+  public SearchResult getForAdministrativeRead(SearchQuery q) throws SearchException, UnauthorizedException {
+    HttpGet get = new HttpGet(getSearchUrl(q, true));
+    HttpResponse response = getResponse(get);
+    try {
+      if (response != null)
+        return SearchResultImpl.valueOf(response.getEntity().getContent());
+    } catch (Exception e) {
+      throw new SearchException(
+              "Unable to parse results of a getForAdministrativeRead request from remote search index: ", e);
+    } finally {
+      closeConnection(response);
+    }
+    throw new SearchException("Unable to perform getForAdministrativeRead from remote search index");
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see org.opencastproject.search.api.SearchService#getByQuery(java.lang.String, int, int)
+   */
+  @Override
+  public SearchResult getByQuery(String query, int limit, int offset) throws SearchException {
+    List<NameValuePair> queryStringParams = new ArrayList<NameValuePair>();
+    queryStringParams.add(new BasicNameValuePair("q", query));
+    queryStringParams.add(new BasicNameValuePair("limit", Integer.toString(limit)));
+    queryStringParams.add(new BasicNameValuePair("offset", Integer.toString(offset)));
+    queryStringParams.add(new BasicNameValuePair("admin", Boolean.TRUE.toString()));
+    HttpGet get = new HttpGet("/lucene.xml?" + URLEncodedUtils.format(queryStringParams, "UTF-8"));
+    logger.debug("Sending remote query '{}'", get.getRequestLine().toString());
+    HttpResponse response = getResponse(get);
+    try {
+      if (response != null)
+        return SearchResultImpl.valueOf(response.getEntity().getContent());
+    } catch (Exception e) {
+      throw new SearchException("Unable to parse getByQuery response from remote search index", e);
     } finally {
       closeConnection(response);
     }
@@ -144,82 +187,49 @@ public class SearchServiceRemoteImpl extends RemoteBase implements SearchService
    */
   private String getSearchUrl(SearchQuery q, boolean admin) {
     StringBuilder url = new StringBuilder();
-    if (!q.isIncludeEpisodes() && q.isIncludeSeries()) {
-      url.append("/series?");
-    } else if (q.isIncludeEpisodes() && !q.isIncludeSeries()) {
+    List<NameValuePair> queryStringParams = new ArrayList<NameValuePair>();
+
+    if (q.getSeriesId() != null || q.getElementFlavors() != null || q.getElementTags() != null) {
       url.append("/episode.xml?");
+
+      if (q.getSeriesId() != null)
+        queryStringParams.add(new BasicNameValuePair("sid", q.getSeriesId()));
+
+      if (q.getElementFlavors() != null) {
+        for (MediaPackageElementFlavor f : q.getElementFlavors()) {
+          queryStringParams.add(new BasicNameValuePair("flavor", f.toString()));
+        }
+      }
+
+      if (q.getElementTags() != null) {
+        for (String t : q.getElementTags()) {
+          queryStringParams.add(new BasicNameValuePair("tag", t));
+        }
+      }
     } else {
-      url.append("/?");
+      url.append("/series.xml?");
+      queryStringParams.add(new BasicNameValuePair("series", Boolean.toString(q.isIncludeSeries())));
+      queryStringParams.add(new BasicNameValuePair("episodes", Boolean.toString(q.isIncludeEpisodes())));
     }
 
-    List<NameValuePair> queryStringParams = new ArrayList<NameValuePair>();
-    if (q.getText() != null) {
+    // General query parameters
+    if (q.getText() != null)
       queryStringParams.add(new BasicNameValuePair("q", q.getText()));
-    }
+
+    if (q.getId() != null)
+      queryStringParams.add(new BasicNameValuePair("id", q.getId()));
+
     if (admin) {
       queryStringParams.add(new BasicNameValuePair("admin", Boolean.TRUE.toString()));
+    } else {
+      queryStringParams.add(new BasicNameValuePair("admin", Boolean.FALSE.toString()));
     }
+
     queryStringParams.add(new BasicNameValuePair("limit", Integer.toString(q.getLimit())));
     queryStringParams.add(new BasicNameValuePair("offset", Integer.toString(q.getOffset())));
 
     url.append(URLEncodedUtils.format(queryStringParams, "UTF-8"));
-
     return url.toString();
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see org.opencastproject.search.api.SearchService#getByQuery(java.lang.String, int, int)
-   */
-  @Override
-  public SearchResult getByQuery(String query, int limit, int offset) throws SearchException {
-    List<NameValuePair> queryStringParams = new ArrayList<NameValuePair>();
-    queryStringParams.add(new BasicNameValuePair("q", query));
-    queryStringParams.add(new BasicNameValuePair("limit", Integer.toString(limit)));
-    queryStringParams.add(new BasicNameValuePair("offset", Integer.toString(offset)));
-
-    StringBuilder url = new StringBuilder();
-    url.append("/lucene?");
-    url.append(URLEncodedUtils.format(queryStringParams, "UTF-8"));
-
-    HttpGet get = new HttpGet(url.toString());
-    logger.debug("Sending remote query '{}'", get.getRequestLine().toString());
-    HttpResponse response = null;
-    try {
-      response = getResponse(get);
-      if (response != null) {
-        return SearchResultImpl.valueOf(response.getEntity().getContent());
-      }
-    } catch (Exception e) {
-      throw new SearchException("Unable to parse getByQuery response from remote search index", e);
-    } finally {
-      closeConnection(response);
-    }
-    throw new SearchException("Unable to perform getByQuery from remote search index");
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see org.opencastproject.search.api.SearchService#getForAdministrativeRead(org.opencastproject.search.api.SearchQuery)
-   */
-  @Override
-  public SearchResult getForAdministrativeRead(SearchQuery q) throws SearchException, UnauthorizedException {
-    HttpGet get = new HttpGet(getSearchUrl(q, true));
-    HttpResponse response = null;
-    try {
-      response = getResponse(get);
-      if (response != null) {
-        return SearchResultImpl.valueOf(response.getEntity().getContent());
-      }
-    } catch (Exception e) {
-      throw new SearchException(
-              "Unable to parse results of a getForAdministrativeRead request from remote search index: ", e);
-    } finally {
-      closeConnection(response);
-    }
-    throw new SearchException("Unable to perform getForAdministrativeRead from remote search index");
   }
 
 }

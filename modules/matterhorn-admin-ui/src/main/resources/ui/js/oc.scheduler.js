@@ -635,11 +635,12 @@ var ocScheduler = (function() {
       url: SCHEDULER_URL + "/conflicts.json",
       async: false,
       data: data,
-      type: 'get',
+      type: 'GET',
+      dataType: 'json',
       success: function(data) {
         var events = [];
-        data = data.catalogs
-        if (data != '') {
+        if (data != null && data != '') {
+          data = data.catalogs;
           for (var i in data) {
             var event = data[i];
             curId = $('#eventId').val();
@@ -1329,7 +1330,7 @@ var ocScheduler = (function() {
           var durationValid = ocScheduler.components.duration.validate();
           var error = [];
           if (startValid.length != 0) {
-            error.push(start.concat(startValid));
+            error.push(startValid);
           }
           if (durationValid.length != 0) {
             error.push(durationValid);

@@ -69,6 +69,7 @@ public class HoldStateTest {
   private static final Logger logger = LoggerFactory.getLogger(HoldStateTest.class);
 
   private WorkflowServiceImpl service = null;
+  private WorkflowDefinitionScanner scanner = null;
   private WorkflowDefinition def = null;
   private WorkflowInstance workflow = null;
   private MediaPackage mp = null;
@@ -114,6 +115,9 @@ public class HoldStateTest {
       }
     };
 
+    scanner = new WorkflowDefinitionScanner();
+    service.addWorkflowDefinitionScanner(scanner);
+
     // security service
     securityService = EasyMock.createNiceMock(SecurityService.class);
     EasyMock.expect(securityService.getUser()).andReturn(SecurityServiceStub.DEFAULT_ORG_ADMIN).anyTimes();
@@ -154,6 +158,7 @@ public class HoldStateTest {
     dao.setServiceRegistry(serviceRegistry);
     dao.setAuthorizationService(authzService);
     dao.setSecurityService(securityService);
+    dao.setOrgDirectory(organizationDirectoryService);
     dao.activate();
     service.setDao(dao);
     service.activate(null);

@@ -3,10 +3,18 @@
   name="org.opencastproject.series.remote.SeriesServiceRemoteImpl" immediate="true">
   <implementation class="org.opencastproject.series.remote.SeriesServiceRemoteImpl" />
   <property name="service.description" value="Series Remote Service Proxy" />
+  
+  <property name="opencast.service.type" value="org.opencastproject.series.remote" />
+  <property name="opencast.service.path" value="/series" />
+  
   <service>
     <provide interface="org.opencastproject.series.api.SeriesService" />
   </service>
   <reference name="trustedHttpClient" interface="org.opencastproject.security.api.TrustedHttpClient"
     cardinality="1..1" policy="static" bind="setTrustedHttpClient" />
-  <reference name="remoteServiceManager" interface="org.opencastproject.serviceregistry.api.ServiceRegistry" cardinality="1..1" policy="static" bind="setRemoteServiceManager" />  
+  <reference name="remoteServiceManager" interface="org.opencastproject.serviceregistry.api.ServiceRegistry" 
+    cardinality="1..1" policy="static" bind="setRemoteServiceManager" />  
+  <reference name="securityService" interface="org.opencastproject.security.api.SecurityService"
+    cardinality="1..1" policy="static" bind="setSecurityService" />
+  
 </scr:component>

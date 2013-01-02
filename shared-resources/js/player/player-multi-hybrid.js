@@ -958,9 +958,10 @@ Opencast.Player = (function ()
         {
             hideEmbed();
         });
+        $("#oc_embed-icon-one").removeClass("ui-state-focus");
         embedDialogDisplayed = true;
     }
-    
+
     /**
      * @memberOf Opencast.Player
      * @description Show the shared time dialog
@@ -1325,6 +1326,7 @@ Opencast.Player = (function ()
     function highSound()
     {
         $("#oc_btn-volume").attr('className', 'oc_btn-volume-high');
+        $("#oc_btn-volume").attr('class', 'oc_btn-volume-high');
         $("#oc_btn-volume").attr(
         {
             alt: UNMUTE,
@@ -1340,6 +1342,7 @@ Opencast.Player = (function ()
     function muteSound()
     {
         $("#oc_btn-volume").attr('className', 'oc_btn-volume-mute');
+        $("#oc_btn-volume").attr('class', 'oc_btn-volume-mute');
         $("#oc_btn-volume").attr(
         {
             alt: MUTE,
@@ -1473,10 +1476,6 @@ Opencast.Player = (function ()
 	}
 	var w = width;
 	var h = height;
-	$('#oc_embed-costum-hide-controls-checkbox').unbind('click');
-	$('#oc_embed-costum-hide-controls-checkbox').bind('click', function() {
-	    Opencast.Player.embedIFrame(w, h, true);
-	});
     }
 
     /**

@@ -61,6 +61,7 @@ import java.util.Set;
 public class PauseWorkflowTest {
 
   private WorkflowServiceImpl service = null;
+  private WorkflowDefinitionScanner scanner = null;
   private WorkflowDefinition def = null;
   private WorkflowInstance workflow = null;
   private MediaPackage mp = null;
@@ -109,6 +110,9 @@ public class PauseWorkflowTest {
       }
     };
 
+    scanner = new WorkflowDefinitionScanner();
+    service.addWorkflowDefinitionScanner(scanner);
+
     // security service
     DefaultOrganization organization = new DefaultOrganization();
     securityService = EasyMock.createNiceMock(SecurityService.class);
@@ -153,6 +157,7 @@ public class PauseWorkflowTest {
     dao.setAuthorizationService(authzService);
     dao.solrRoot = sRoot + File.separator + "solr";
     dao.setSecurityService(securityService);
+    dao.setOrgDirectory(organizationDirectoryService);
     dao.activate();
     service.setDao(dao);
     service.activate(null);

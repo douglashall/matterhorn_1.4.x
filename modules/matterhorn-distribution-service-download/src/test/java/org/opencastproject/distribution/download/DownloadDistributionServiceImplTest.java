@@ -15,9 +15,6 @@
  */
 package org.opencastproject.distribution.download;
 
-import static org.opencastproject.security.api.SecurityConstants.DEFAULT_ORGANIZATION_ANONYMOUS;
-import static org.opencastproject.security.api.SecurityConstants.DEFAULT_ORGANIZATION_ID;
-
 import org.opencastproject.job.api.Job;
 import org.opencastproject.job.api.JobBarrier;
 import org.opencastproject.mediapackage.DefaultMediaPackageSerializerImpl;
@@ -29,6 +26,7 @@ import org.opencastproject.security.api.DefaultOrganization;
 import org.opencastproject.security.api.Organization;
 import org.opencastproject.security.api.OrganizationDirectoryService;
 import org.opencastproject.security.api.SecurityService;
+import org.opencastproject.security.api.TrustedHttpClient;
 import org.opencastproject.security.api.User;
 import org.opencastproject.security.api.UserDirectoryService;
 import org.opencastproject.serviceregistry.api.ServiceRegistry;
@@ -40,6 +38,9 @@ import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
@@ -48,6 +49,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class DownloadDistributionServiceImplTest {
 
@@ -72,7 +75,20 @@ public class DownloadDistributionServiceImplTest {
     distributionRoot = new File("./target/static");
     service = new DownloadDistributionService();
 
-    User anonymous = new User("anonymous", DEFAULT_ORGANIZATION_ID, new String[] { DEFAULT_ORGANIZATION_ANONYMOUS });
+    StatusLine statusLine = EasyMock.createNiceMock(StatusLine.class);
+    EasyMock.expect(statusLine.getStatusCode()).andReturn(HttpServletResponse.SC_OK).anyTimes();
+    EasyMock.replay(statusLine);
+
+    HttpResponse response = EasyMock.createNiceMock(HttpResponse.class);
+    EasyMock.expect(response.getStatusLine()).andReturn(statusLine).anyTimes();
+    EasyMock.replay(response);
+
+    TrustedHttpClient httpClient = EasyMock.createNiceMock(TrustedHttpClient.class);
+    EasyMock.expect(httpClient.execute((HttpUriRequest) EasyMock.anyObject())).andReturn(response).anyTimes();
+    EasyMock.replay(httpClient);
+
+    User anonymous = new User("anonymous", DefaultOrganization.DEFAULT_ORGANIZATION_ID,
+            new String[] { DefaultOrganization.DEFAULT_ORGANIZATION_ANONYMOUS });
     UserDirectoryService userDirectoryService = EasyMock.createMock(UserDirectoryService.class);
     EasyMock.expect(userDirectoryService.loadUser((String) EasyMock.anyObject())).andReturn(anonymous).anyTimes();
     EasyMock.replay(userDirectoryService);
@@ -94,7 +110,7 @@ public class DownloadDistributionServiceImplTest {
     serviceRegistry = new ServiceRegistryInMemoryImpl(service, securityService, userDirectoryService,
             organizationDirectoryService);
     service.setServiceRegistry(serviceRegistry);
-
+    service.setTrustedHttpClient(httpClient);
     service.distributionDirectory = distributionRoot;
     service.serviceUrl = UrlSupport.DEFAULT_BASE_URL;
     Workspace workspace = EasyMock.createNiceMock(Workspace.class);
@@ -141,7 +157,7 @@ public class DownloadDistributionServiceImplTest {
   @Test
   public void testRetract() throws Exception {
     int elementCount = mp.getElements().length;
-    
+
     // Distribute the mediapackage and all of its elements
     Job job1 = service.distribute(mp, "track-1");
     Job job2 = service.distribute(mp, "catalog-1");
@@ -149,7 +165,7 @@ public class DownloadDistributionServiceImplTest {
     Job job4 = service.distribute(mp, "notes");
     JobBarrier jobBarrier = new JobBarrier(serviceRegistry, 500, job1, job2, job3, job4);
     jobBarrier.waitForJobs();
-    
+
     // Add the new elements to the mediapackage
     mp.add(MediaPackageElementParser.getFromXml(job1.getPayload()));
     mp.add(MediaPackageElementParser.getFromXml(job2.getPayload()));
@@ -189,7 +205,7 @@ public class DownloadDistributionServiceImplTest {
     Assert.assertNotNull(mp.getElementById("catalog-1"));
     Assert.assertNotNull(mp.getElementById("catalog-2"));
     Assert.assertNotNull(mp.getElementById("notes"));
-    
+
     Assert.assertFalse(service.getDistributionFile(mp, mp.getElementById("track-1")).isFile());
     Assert.assertFalse(service.getDistributionFile(mp, mp.getElementById("catalog-1")).isFile());
     Assert.assertFalse(service.getDistributionFile(mp, mp.getElementById("catalog-2")).isFile());
